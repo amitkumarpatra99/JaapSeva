@@ -1,6 +1,6 @@
 "use client";
 
-import { RotateCcw, Lock } from "lucide-react";
+import { RotateCcw, Lock, History } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ControlPanelProps {
@@ -9,9 +9,11 @@ interface ControlPanelProps {
   onResetRequest: () => void;
   onUndo: () => void;
   onLockToggle: () => void;
+  onShowHistory: () => void;
+  isLocked: boolean;
 }
 
-const PRESETS = [11, 27, 54, 108];
+const PRESETS = [11, 108];
 
 export default function ControlPanel({
   selectedTarget,
@@ -19,25 +21,31 @@ export default function ControlPanel({
   onResetRequest,
   onUndo,
   onLockToggle,
+  onShowHistory,
+  isLocked,
 }: ControlPanelProps) {
   return (
 
     <div className="w-full max-w-sm flex flex-col items-center animate-in slide-in-from-bottom-8 duration-700 delay-200">
 
-      {/* Unified Glass Control Capsule */}
-      <div className="w-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2rem] p-2 flex flex-col gap-2">
+      {/* Unified Glass Control Capsule matching Modal Style */}
+      {/* old: bg-white/5 ... */}
+      {/* new: bg-white/10 backdrop-blur-2xl border-white/20 shadow... */}
+      <div className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] rounded-[2rem] p-2 flex flex-col gap-2">
 
         {/* Top Row: Presets */}
-        <div className="flex justify-between items-center bg-white/30 rounded-[1.5rem] p-1.5 border border-white/40">
+        <div className="flex justify-between items-center bg-white/5 rounded-[1.5rem] p-1.5 border border-white/10">
           {PRESETS.map((target) => (
             <button
               key={target}
               onClick={() => onTargetSelect(target)}
+              disabled={isLocked}
               className={cn(
                 "flex-1 py-3 rounded-[1.2rem] font-bold text-xs tracking-wider transition-all duration-300",
                 selectedTarget === target
-                  ? "bg-gradient-to-br from-jaap-primary to-jaap-accent text-white shadow-[0_4px_12px_-2px_rgba(245,158,11,0.4)] scale-100"
-                  : "text-jaap-neutral/70 hover:bg-white/50 hover:text-jaap-primary"
+                  ? "bg-black text-white shadow-md scale-100"
+                  : "text-black/60 hover:bg-black/5 hover:text-black",
+                isLocked && "opacity-50 cursor-not-allowed hover:bg-transparent"
               )}
             >
               {target}
@@ -47,38 +55,59 @@ export default function ControlPanel({
 
         {/* Bottom Row: Actions */}
         <div className="flex items-center justify-between px-2 pb-1 pt-1 gap-2">
-          <button
-            onClick={onUndo}
-            className="flex-1 flex justify-center items-center gap-2 text-jaap-neutral/60 hover:text-jaap-primary transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-white/40 group"
-            title="Undo"
-          >
-            <RotateCcw size={16} className="-scale-x-100 group-hover:-rotate-12 transition-transform" />
-            <span>Undo</span>
-          </button>
 
-          <div className="w-px h-8 bg-jaap-primary/10" />
+          {/* Left Group */}
+          <div className="flex flex-1 gap-2">
+            <button
+              onClick={onUndo}
+              disabled={isLocked}
+              className="flex-1 flex justify-center items-center gap-2 text-black/60 hover:text-black transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-black/5 group disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Undo"
+            >
+              <RotateCcw size={16} className="-scale-x-100 group-hover:-rotate-12 transition-transform" />
+            </button>
 
+            <button
+              onClick={onShowHistory}
+              className="flex-1 flex justify-center items-center gap-2 text-black/60 hover:text-black transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-black/5"
+              title="History"
+            >
+              <History size={16} />
+            </button>
+          </div>
+
+          <div className="w-px h-8 bg-black/10" />
+
+          {/* Center Lock */}
           <button
             onClick={onLockToggle}
-            className="flex-[1.5] flex justify-center items-center gap-2 text-jaap-primary hover:text-jaap-accent transition-all text-xs font-bold uppercase tracking-widest py-3 rounded-2xl bg-white/40 hover:bg-white/60 border border-white/50 shadow-sm hover:shadow-md active:scale-95"
+            className={cn(
+              "flex-[1.5] flex justify-center items-center gap-2 transition-all text-xs font-bold uppercase tracking-widest py-3 rounded-2xl border shadow-sm mx-1",
+              isLocked
+                ? "bg-black text-white border-black/10 shadow-md"
+                : "bg-white/10 text-black hover:text-black/70 hover:bg-white/30 border-white/20 hover:shadow-md active:scale-95"
+            )}
           >
             <Lock size={16} />
-            <span>Lock Only</span>
+            <span>{isLocked ? "Unlock" : "Lock"}</span>
           </button>
 
-          <div className="w-px h-8 bg-jaap-primary/10" />
+          <div className="w-px h-8 bg-black/10" />
 
-          <button
-            onClick={onResetRequest}
-            className="flex-1 flex justify-center items-center gap-2 text-jaap-neutral/60 hover:text-red-500 transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-red-50/50 group"
-            title="Reset"
-          >
-            <RotateCcw size={16} className="group-hover:rotate-180 transition-transform duration-500" />
-            <span>Reset</span>
-          </button>
+          {/* Right Group */}
+          <div className="flex flex-1 gap-2">
+            <div className="flex-1" />
+            <button
+              onClick={onResetRequest}
+              className="flex-1 flex justify-center items-center gap-2 text-black/60 hover:text-black transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-black/5 group"
+              title="Reset"
+            >
+              <RotateCcw size={16} className="group-hover:rotate-180 transition-transform duration-500" />
+            </button>
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
   );
 }

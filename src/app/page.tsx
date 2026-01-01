@@ -1,174 +1,137 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Counter from "@/components/Counter";
 import ControlPanel from "@/components/ControlPanel";
 import StatsDisplay from "@/components/StatsDisplay";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import HistoryModal from "@/components/HistoryModal";
+import SpiritualBackground from "@/components/SpiritualBackground";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
+gsap.registerPlugin(useGSAP);
 
 export default function Home() {
   const [count, setCount] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
   const [target, setTarget] = useState(108);
   const [streak, setStreak] = useState(0);
-  const [history, setHistory] = useState<Record<string, number>>({});
   const [malasCompleted, setMalasCompleted] = useState(0);
-  const [isMalaMode, setIsMalaMode] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const [history, setHistory] = useState<any[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
 
-  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
-  const [isLocked, setIsLocked] = useState(false); // Lock/Focus Mode
-  const [isLoaded, setIsLoaded] = useState(false);
+  // Refs for Animation
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // Load from LocalStorage
+  // GSAP Animations
+  useGSAP(() => {
+    // 1. Intro Animation Sequence
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    tl.fromTo(contentRef.current,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1.2 }
+    )
+      .fromTo(".anim-item",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 },
+        "-=0.8"
+      );
+
+  }, { scope: containerRef });
+
+  // Initialize from LocalStorage
   useEffect(() => {
-    const savedCount = localStorage.getItem("jaap-count");
-    const savedTotal = localStorage.getItem("jaap-total-count");
-    const savedTarget = localStorage.getItem("jaap-target");
-    const savedStreak = localStorage.getItem("jaap-streak");
-    const savedHistory = localStorage.getItem("jaap-history");
-    const savedMalas = localStorage.getItem("jaap-malas-completed");
-    const savedMalaMode = localStorage.getItem("jaap-mala-mode");
+    const savedCount = localStorage.getItem("jaap_count");
+    const savedTarget = localStorage.getItem("jaap_target");
+    const savedStreak = localStorage.getItem("jaap_streak");
+    const savedMalas = localStorage.getItem("jaap_malas");
+    const savedTotal = localStorage.getItem("jaap_total");
+    const savedHistory = localStorage.getItem("jaap_history");
 
-    if (savedCount) setCount(parseInt(savedCount, 10));
-    if (savedTotal) setTotalCount(parseInt(savedTotal, 10));
-    if (savedTarget) setTarget(parseInt(savedTarget, 10));
-    if (savedStreak) setStreak(parseInt(savedStreak, 10));
+    if (savedCount) setCount(parseInt(savedCount));
+    if (savedTarget) setTarget(parseInt(savedTarget));
+    if (savedStreak) setStreak(parseInt(savedStreak));
+    if (savedMalas) setMalasCompleted(parseInt(savedMalas));
+    if (savedTotal) setTotalCount(parseInt(savedTotal));
     if (savedHistory) setHistory(JSON.parse(savedHistory));
-    if (savedMalas) setMalasCompleted(parseInt(savedMalas, 10));
-    if (savedMalaMode) setIsMalaMode(savedMalaMode === "true");
-
-    setIsLoaded(true);
   }, []);
 
-  // Persist changes
+  // Save Effect
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("jaap-count", count.toString());
-      localStorage.setItem("jaap-total-count", totalCount.toString());
-      localStorage.setItem("jaap-target", target.toString());
-      localStorage.setItem("jaap-streak", streak.toString());
-      localStorage.setItem("jaap-history", JSON.stringify(history));
-      localStorage.setItem("jaap-malas-completed", malasCompleted.toString());
-      localStorage.setItem("jaap-mala-mode", isMalaMode.toString());
-    }
-  }, [count, totalCount, target, streak, history, malasCompleted, isMalaMode, isLoaded]);
+    localStorage.setItem("jaap_count", count.toString());
+    localStorage.setItem("jaap_target", target.toString());
+    localStorage.setItem("jaap_streak", streak.toString());
+    localStorage.setItem("jaap_malas", malasCompleted.toString());
+    localStorage.setItem("jaap_total", totalCount.toString());
+    localStorage.setItem("jaap_history", JSON.stringify(history));
+  }, [count, target, streak, malasCompleted, totalCount, history]);
 
-
-
-  const getTodayString = () => new Date().toISOString().split('T')[0];
-
-  const updateStreakAndHistory = (increment: boolean = true) => {
-    const today = getTodayString();
-
-    // Update History
-    setHistory(prev => ({
-      ...prev,
-      [today]: Math.max(0, (prev[today] || 0) + (increment ? 1 : -1))
-    }));
-
-    if (increment) {
-      const lastActive = localStorage.getItem("jaap-last-active-date");
-      if (lastActive !== today) {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayString = yesterday.toISOString().split('T')[0];
-
-        if (lastActive === yesterdayString) {
-          setStreak(prev => prev + 1);
-        } else {
-          setStreak(1);
-        }
-        localStorage.setItem("jaap-last-active-date", today);
-      }
-    }
+  const saveSession = () => {
+    const newSession = {
+      id: Date.now().toString(),
+      date: new Date().toISOString(),
+      count: target, // Assuming session saves when target reached
+      target: target,
+    };
+    setHistory((prev) => [...prev, newSession]);
   };
 
   const handleIncrement = () => {
-    updateStreakAndHistory(true);
-    setTotalCount(prev => prev + 1);
+    if (isLocked) return;
 
-    setCount((prev) => {
-      const newCount = prev + 1;
-      if (isMalaMode && newCount >= target) {
-        setMalasCompleted(m => m + 1);
-        try { if (navigator.vibrate) navigator.vibrate([50, 50, 50]); } catch (e) { /* ignore */ }
-        return 0;
-      }
-      return newCount;
-    });
+    // Vibrate on mobile (Haptic handled in Counter.tsx now, but keeping this for fallback/safety)
+    // if (navigator.vibrate) try { navigator.vibrate(5); } catch(e) {}
 
-    try { if (navigator.vibrate) navigator.vibrate(5); } catch (e) { /* ignore */ }
-  };
+    const newCount = count + 1;
+    setCount(newCount);
+    setTotalCount((prev) => prev + 1);
 
-  const handleUndo = () => {
-    // Basic logic: Undo last tap if count > 0 // Or undo mala?
-    // For now, simple count undo.
-    if (count > 0) {
-      setCount(c => c - 1);
-      setTotalCount(t => Math.max(0, t - 1));
-      updateStreakAndHistory(false);
-    } else if (malasCompleted > 0 && count === 0) {
-      // Undo a mala completion
-      setMalasCompleted(m => m - 1);
-      setCount(target - 1);
-      setTotalCount(t => Math.max(0, t - 1));
-      updateStreakAndHistory(false);
+    if (newCount === target) {
+      // Mala Complete!
+      setMalasCompleted((prev) => prev + 1);
+      setStreak((prev) => prev + 1);
+      saveSession();
+      setCount(0); // Reset count after mala
     }
   };
 
-  const handleReset = () => {
+  const handleUndo = () => {
+    if (count > 0 && !isLocked) {
+      setCount((prev) => prev - 1);
+      setTotalCount((prev) => Math.max(0, prev - 1));
+    }
+  };
+
+  const handleResetRequest = () => {
+    if (!isLocked) setShowConfirm(true);
+  };
+
+  const confirmReset = () => {
     setCount(0);
-    // Optional: Reset Malas for the session? Or just count? 
-    // Usually just count. 
+    setShowConfirm(false);
   };
 
-  const handleTargetSelect = (newTarget: number) => {
-    setTarget(newTarget);
+  const clearHistory = () => {
+    setHistory([]);
   };
-
-  // Keyboard support
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === " " || e.key === "Enter" || e.key === "ArrowUp") {
-        e.preventDefault();
-        handleIncrement();
-      } else if (e.key === "ArrowDown" || e.key === "Backspace") {
-        if (e.key === "ArrowDown") {
-          e.preventDefault();
-          handleUndo();
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [count, totalCount, isMalaMode, target, malasCompleted]); // Re-bind when state changes (since handlers aren't memorized)
-
-  if (!isLoaded) return null;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 relative overflow-hidden bg-background text-foreground transition-colors duration-500 font-sans selection:bg-jaap-primary/30">
+    <main ref={containerRef} className="flex min-h-screen flex-col items-center justify-center p-4 md:p-6 relative overflow-hidden bg-background text-foreground transition-colors duration-500 font-sans selection:bg-jaap-primary/30">
 
-      {/* Background Ambience - Warm Spiritual Theme */}
-      <div className="absolute inset-0 z-0 opacity-100 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-jaap-secondary/20 via-background to-background" />
+      {/* NEW Animated Spiritual Background */}
+      <SpiritualBackground />
 
-      {/* Glassmorphism Background Blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-jaap-primary/20 rounded-full blur-[100px] animate-pulse pointer-events-none mix-blend-multiply" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-jaap-accent/20 rounded-full blur-[100px] animate-pulse pointer-events-none mix-blend-multiply delay-1000" />
-      <div className="absolute top-[40%] left-[50%] -translate-x-1/2 w-[300px] h-[300px] bg-jaap-secondary/20 rounded-full blur-[80px] pointer-events-none mix-blend-multiply" />
+      <div ref={contentRef} className="z-10 w-full max-w-md flex flex-col items-center gap-8 md:gap-12 py-8 opacity-0">
 
-      {/* Subtle Texture Pattern (Dots) */}
-      <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none"
-        style={{ backgroundImage: 'radial-gradient(rgba(245, 158, 11, 0.2) 1px, transparent 1px)', backgroundSize: '32px 32px' }}
-      />
-
-      <div className="z-10 w-full max-w-md flex flex-col items-center gap-12 animate-in fade-in duration-1000 slide-in-from-bottom-4 py-8">
-
-        <div className="text-center space-y-2 relative">
+        <div className="text-center space-y-2 relative anim-item">
           {/* Header Glow */}
           <div className="absolute -inset-x-10 -inset-y-10 bg-white/40 blur-3xl rounded-full z-0 pointer-events-none" />
-          <h1 className="text-6xl font-serif font-bold tracking-tight text-foreground relative z-10 drop-shadow-sm bg-clip-text text-transparent bg-gradient-to-r from-jaap-primary via-jaap-accent to-jaap-secondary py-2">
+          <h1 className="text-6xl font-serif font-bold tracking-tight text-jaap-primary relative z-10 drop-shadow-sm py-2">
             JaapSeva
           </h1>
           <p className="text-xs text-jaap-neutral tracking-[0.4em] font-bold uppercase relative z-10 opacity-80">
@@ -176,7 +139,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className={isLocked ? "opacity-30 pointer-events-none transition-opacity duration-300" : "transition-opacity duration-300"}>
+        <div className={`anim-item ${isLocked ? "opacity-30 pointer-events-none transition-opacity duration-300" : "transition-opacity duration-300"}`}>
           <StatsDisplay
             target={target}
             currentCount={count}
@@ -186,42 +149,62 @@ export default function Home() {
           />
         </div>
 
+        <div className="anim-item">
+          <Counter
+            count={count}
+            target={target}
+            onIncrement={handleIncrement}
+            isLocked={isLocked}
+          />
+        </div>
 
-
-        <Counter
-          count={count}
-          target={target}
-          onIncrement={handleIncrement}
-        />
-
-        {/* Controls or Unlock Button */}
-        {!isLocked ? (
+        {/* Controls */}
+        <div className="anim-item w-full flex justify-center">
           <ControlPanel
             selectedTarget={target}
-            onTargetSelect={handleTargetSelect}
-            onResetRequest={() => setIsResetModalOpen(true)}
+            onTargetSelect={(t) => { if (!isLocked) setTarget(t); }}
+            onResetRequest={handleResetRequest}
             onUndo={handleUndo}
-            onLockToggle={() => setIsLocked(true)}
+            onLockToggle={() => setIsLocked(!isLocked)}
+            onShowHistory={() => setShowHistory(true)}
+            isLocked={isLocked}
           />
-        ) : (
+        </div>
+
+        {/* Footer - JaapSeva by MR PATRA */}
+        <div className="anim-item mt-4 flex flex-row items-center gap-2 text-[10px] font-mono tracking-widest uppercase text-jaap-neutral/60">
           <button
-            onClick={() => setIsLocked(false)}
-            className="flex flex-col items-center gap-2 text-jaap-neutral/50 hover:text-jaap-primary transition-colors animate-pulse px-6 py-4"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="hover:text-jaap-primary transition-colors hover:underline underline-offset-4 cursor-pointer"
           >
-            <div className="p-3 bg-white/10 rounded-full backdrop-blur-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-            </div>
-            <span className="text-xs font-medium uppercase tracking-widest">Tap to Unlock</span>
+            JaapSeva
           </button>
-        )}
+          <span className="opacity-40 text-[8px]">by</span>
+          <a
+            href="https://mrpatra.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-jaap-primary transition-colors hover:underline underline-offset-4 font-bold cursor-pointer"
+          >
+            MR PATRA
+          </a>
+        </div>
+
       </div>
 
       <ConfirmationModal
-        isOpen={isResetModalOpen}
-        onClose={() => setIsResetModalOpen(false)}
-        onConfirm={handleReset}
+        isOpen={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={confirmReset}
         title="Reset Counter?"
-        message="Are you sure you want to reset your current Jaap count to zero? This action cannot be undone."
+        message="Are you sure you want to reset? This action cannot be undone."
+      />
+
+      <HistoryModal
+        isOpen={showHistory}
+        onClose={() => setShowHistory(false)}
+        history={history}
+        onClearHistory={clearHistory}
       />
     </main>
   );
