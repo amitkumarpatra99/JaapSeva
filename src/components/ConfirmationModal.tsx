@@ -31,27 +31,27 @@ export default function ConfirmationModal({
   if (!mounted || !isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-jaap-primary/10 backdrop-blur-[2px] animate-in fade-in duration-300">
+      <div className="bg-white/80 backdrop-blur-xl border border-white/60 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-300">
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-foreground">{title}</h3>
+            <h3 className="text-xl font-bold text-jaap-primary tracking-wide">{title}</h3>
             <button
               onClick={onClose}
-              className="text-jaap-neutral hover:text-foreground transition-colors"
+              className="text-jaap-neutral/60 hover:text-jaap-primary transition-colors p-1 hover:bg-white/50 rounded-full"
             >
-              <X size={24} />
+              <X size={20} />
             </button>
           </div>
-          
-          <p className="text-muted-foreground text-jaap-neutral">
+
+          <p className="text-jaap-neutral/80 font-medium leading-relaxed">
             {message}
           </p>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-3 pt-4">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-jaap-neutral/30 text-foreground font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="flex-1 px-4 py-3 rounded-2xl border border-jaap-neutral/20 text-jaap-neutral font-bold text-sm hover:bg-white/60 transition-colors"
             >
               Cancel
             </button>
@@ -60,7 +60,7 @@ export default function ConfirmationModal({
                 onConfirm();
                 onClose();
               }}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors"
+              className="flex-1 px-4 py-3 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-sm shadow-lg shadow-red-500/20 transition-all hover:scale-[1.02]"
             >
               Reset
             </button>

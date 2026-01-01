@@ -6,32 +6,32 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-jaap-saffron: #fb923c;
-  --color-jaap-blue: #60a5fa;
-  --color-jaap-neutral: #94a3b8;
+  --color-jaap-primary: #F59E0B;
+  /* Saffron */
+  --color-jaap-secondary: #FDBA74;
+  /* Soft Orange */
+  --color-jaap-accent: #FB923C;
+  /* Contrast Orange */
+
+  --color-jaap-neutral: #9ca3af;
+  /* Gray 400 */
+  --color-jaap-soft-orange: #FFEDD5;
+  /* Orange 100 for subtles */
 
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
 }
 
 :root {
-  --background: #f8fafc;
-  /* Slate 50 */
-  --foreground: #1e293b;
-  /* Slate 800 */
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    /* Slate 900 */
-    --foreground: #f1f5f9;
-    /* Slate 100 */
-  }
+  --background: #FFF7ED;
+  /* Warm Cream */
+  --foreground: #1F2937;
+  /* Charcoal */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
