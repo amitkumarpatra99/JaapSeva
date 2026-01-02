@@ -20,17 +20,10 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
   const rippleRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // --- Haptic Feedback ---
-  const triggerHaptic = () => {
-    if (typeof navigator !== "undefined" && navigator.vibrate) {
-      try { navigator.vibrate(10); } catch (e) { /* ignore */ }
-    }
-  };
 
   const handleIncrement = () => {
     if (isLocked) return;
     onIncrement();
-    triggerHaptic();
   };
 
   // --- GSAP Animations ---

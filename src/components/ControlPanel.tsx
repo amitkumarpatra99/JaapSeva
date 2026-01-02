@@ -1,6 +1,6 @@
 "use client";
 
-import { RotateCcw, Lock, History } from "lucide-react";
+import { RotateCcw, Lock, History, Volume2, VolumeX, Smartphone, Zap, ZapOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ControlPanelProps {
@@ -11,6 +11,10 @@ interface ControlPanelProps {
   onLockToggle: () => void;
   onShowHistory: () => void;
   isLocked: boolean;
+  soundEnabled: boolean;
+  onToggleSound: () => void;
+  hapticEnabled: boolean;
+  onToggleHaptic: () => void;
 }
 
 const PRESETS = [11, 108];
@@ -23,6 +27,10 @@ export default function ControlPanel({
   onLockToggle,
   onShowHistory,
   isLocked,
+  soundEnabled,
+  onToggleSound,
+  hapticEnabled,
+  onToggleHaptic,
 }: ControlPanelProps) {
   return (
 
@@ -94,12 +102,37 @@ export default function ControlPanel({
 
           <div className="w-px h-8 bg-black/10" />
 
-          {/* Right Group */}
-          <div className="flex flex-1 gap-2">
-            <div className="flex-1" />
+          {/* Right Group: Sound, Haptic, Reset */}
+          <div className="flex flex-[1.5] gap-1">
+
+            {/* Sound Toggle */}
+            <button
+              onClick={onToggleSound}
+              className={cn(
+                "flex-1 flex justify-center items-center gap-2 transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-black/5",
+                soundEnabled ? "text-black" : "text-black/40"
+              )}
+              title={soundEnabled ? "Mute Sound" : "Enable Sound"}
+            >
+              {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            </button>
+
+            {/* Haptic Toggle */}
+            <button
+              onClick={onToggleHaptic}
+              className={cn(
+                "flex-1 flex justify-center items-center gap-2 transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-black/5",
+                hapticEnabled ? "text-black" : "text-black/40"
+              )}
+              title={hapticEnabled ? "Disable Vibration" : "Enable Vibration"}
+            >
+              {hapticEnabled ? <Zap size={16} /> : <ZapOff size={16} />}
+            </button>
+
+            {/* Reset */}
             <button
               onClick={onResetRequest}
-              className="flex-1 flex justify-center items-center gap-2 text-black/60 hover:text-black transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-black/5 group"
+              className="flex-1 flex justify-center items-center gap-2 text-black/60 hover:text-red-600 transition-all text-[10px] font-bold uppercase tracking-widest py-3 rounded-2xl hover:bg-black/5 group"
               title="Reset"
             >
               <RotateCcw size={16} className="group-hover:rotate-180 transition-transform duration-500" />

@@ -1,8 +1,22 @@
-# JaapSeva - Digital Mala Counter 📿
-> *Ocean Glass Edition v2.0*
+<div align="center">
+  <h1>JaapSeva - Digital Mala Counter 📿</h1>
+  
+  <p>
+    <img src="https://img.shields.io/badge/version-2.0-blue.svg?style=flat-square" alt="Version 2.0" />
+    <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="MIT License" />
+  </p>
 
-![Version](https://img.shields.io/badge/version-2.0-blue.svg?style=flat-square)
-![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)
+  <p>
+    <strong> Glass Edition v2.0</strong>
+  </p>
+
+  <br />
+
+  <img src="public/Project.png" alt="JaapSeva Project Screenshot" width="100%" style="border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);" />
+
+  <br />
+  <br />
+</div>
 
 JaapSeva is a modern, spiritual companion app designed for mantra chanting. Built with a serene "Ocean Glass" aesthetic, it combines ancient tradition with cutting-edge web technology to provide a distraction-free, premium chanting experience.
 

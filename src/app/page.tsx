@@ -9,6 +9,7 @@ import HistoryModal from "@/components/HistoryModal";
 import SpiritualBackground from "@/components/SpiritualBackground";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import useSound from "@/hooks/useSound";
 
 gsap.registerPlugin(useGSAP);
 
@@ -22,6 +23,13 @@ export default function Home() {
   const [isLocked, setIsLocked] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+
+  // Settings
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [hapticEnabled, setHapticEnabled] = useState(true);
+
+  // Sound Hook
+  const { playClick, playMalaComplete, playReset } = useSound(soundEnabled, hapticEnabled);
 
   // Refs for Animation
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,6 +60,8 @@ export default function Home() {
     const savedMalas = localStorage.getItem("jaap_malas");
     const savedTotal = localStorage.getItem("jaap_total");
     const savedHistory = localStorage.getItem("jaap_history");
+    const savedSound = localStorage.getItem("jaap_sound");
+    const savedHaptic = localStorage.getItem("jaap_haptic");
 
     if (savedCount) setCount(parseInt(savedCount));
     if (savedTarget) setTarget(parseInt(savedTarget));
@@ -59,6 +69,8 @@ export default function Home() {
     if (savedMalas) setMalasCompleted(parseInt(savedMalas));
     if (savedTotal) setTotalCount(parseInt(savedTotal));
     if (savedHistory) setHistory(JSON.parse(savedHistory));
+    if (savedSound !== null) setSoundEnabled(savedSound === "true");
+    if (savedHaptic !== null) setHapticEnabled(savedHaptic === "true");
   }, []);
 
   // Save Effect
@@ -69,7 +81,9 @@ export default function Home() {
     localStorage.setItem("jaap_malas", malasCompleted.toString());
     localStorage.setItem("jaap_total", totalCount.toString());
     localStorage.setItem("jaap_history", JSON.stringify(history));
-  }, [count, target, streak, malasCompleted, totalCount, history]);
+    localStorage.setItem("jaap_sound", soundEnabled.toString());
+    localStorage.setItem("jaap_haptic", hapticEnabled.toString());
+  }, [count, target, streak, malasCompleted, totalCount, history, soundEnabled, hapticEnabled]);
 
   const saveSession = () => {
     const newSession = {
@@ -84,10 +98,16 @@ export default function Home() {
   const handleIncrement = () => {
     if (isLocked) return;
 
-    // Vibrate on mobile (Haptic handled in Counter.tsx now, but keeping this for fallback/safety)
-    // if (navigator.vibrate) try { navigator.vibrate(5); } catch(e) {}
-
+    // Determine if next count is completion
     const newCount = count + 1;
+
+    // Play feedback BEFORE state update logic (re-render might delay slightly)
+    if (newCount === target) {
+      playMalaComplete();
+    } else {
+      playClick();
+    }
+
     setCount(newCount);
     setTotalCount((prev) => prev + 1);
 
@@ -104,6 +124,8 @@ export default function Home() {
     if (count > 0 && !isLocked) {
       setCount((prev) => prev - 1);
       setTotalCount((prev) => Math.max(0, prev - 1));
+      // Optional: Sound for undo? Maybe soft click.
+      playClick();
     }
   };
 
@@ -114,6 +136,7 @@ export default function Home() {
   const confirmReset = () => {
     setCount(0);
     setShowConfirm(false);
+    playReset();
   };
 
   const clearHistory = () => {
@@ -168,6 +191,10 @@ export default function Home() {
             onLockToggle={() => setIsLocked(!isLocked)}
             onShowHistory={() => setShowHistory(true)}
             isLocked={isLocked}
+            soundEnabled={soundEnabled}
+            onToggleSound={() => setSoundEnabled(!soundEnabled)}
+            hapticEnabled={hapticEnabled}
+            onToggleHaptic={() => setHapticEnabled(!hapticEnabled)}
           />
         </div>
 
