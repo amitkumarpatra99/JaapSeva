@@ -2,6 +2,7 @@
 
 import { RotateCcw, Lock, History, Volume2, VolumeX, Smartphone, Zap, ZapOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 interface ControlPanelProps {
   selectedTarget: number;
@@ -141,6 +142,11 @@ export default function ControlPanel({
         </div>
 
       </div>
-    </div>
+
+      {/* Theme Switcher */}
+      <div className="mt-4">
+        <ThemeSwitcher />
+      </div>
+    </div >
   );
 }

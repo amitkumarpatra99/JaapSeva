@@ -5,25 +5,85 @@
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
-  /* Spiritual Saffron Palette */
-  --color-jaap-primary: #FF9933;
-  /* Saffron (Bhagwa) */
-  --color-jaap-secondary: #FFB347;
-  /* Pastel Orange */
-  --color-jaap-accent: #FFD700;
-  /* Gold */
-
-  --color-jaap-neutral: #5D4037;
-  /* Earthy Brown */
+  --color-jaap-primary: var(--jaap-primary);
+  --color-jaap-secondary: var(--jaap-secondary);
+  --color-jaap-accent: var(--jaap-accent);
+  --color-jaap-neutral: var(--jaap-neutral);
+  --color-jaap-bg-pattern: var(--jaap-bg-pattern);
 
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+}
 
-  --background: #FFF8E7;
-  /* Warm Cream */
-  --foreground: #4A3B32;
-  /* Deep Warm Brown */
+@layer base {
+  :root {
+    /* Base - Saffron (Default) */
+    --background: #FFF8E7;
+    /* Warm Cream */
+    --foreground: #4A3B32;
+    /* Deep Warm Brown */
+    --jaap-primary: #FF9933;
+    /* Saffron (Bhagwa) */
+    --jaap-secondary: #FFB347;
+    /* Pastel Orange */
+    --jaap-accent: #FFD700;
+    /* Gold */
+    --jaap-neutral: #5D4037;
+    /* Earthy Brown */
+    --jaap-bg-pattern: #FFE0B2;
+    /* Light Orange Pattern */
+  }
+
+  .ocean {
+    --background: #E0F7FA;
+    /* Very Light Cyan */
+    --foreground: #013a3e;
+    /* Deep Cyan/Teal */
+    --jaap-primary: #00ACC1;
+    /* Cyan 600 */
+    --jaap-secondary: #4DD0E1;
+    /* Cyan 300 */
+    --jaap-accent: #00BCD4;
+    /* Cyan */
+    --jaap-neutral: #006064;
+    /* Cyan 900 */
+    --jaap-bg-pattern: #B2EBF2;
+    /* Light Cyan Pattern */
+  }
+
+  .forest {
+    --background: #F1F8E9;
+    /* Light Green */
+    --foreground: #1B5E20;
+    /* Dark Green */
+    --jaap-primary: #66BB6A;
+    /* Green 400 */
+    --jaap-secondary: #A5D6A7;
+    /* Green 200 */
+    --jaap-accent: #43A047;
+    /* Green 600 */
+    --jaap-neutral: #33691E;
+    /* Light Green 900 */
+    --jaap-bg-pattern: #C8E6C9;
+    /* Green Pattern */
+  }
+
+  .dark {
+    --background: #121212;
+    /* Dark Gray */
+    --foreground: #E0E0E0;
+    /* Light Gray */
+    --jaap-primary: #FFB74D;
+    /* Orange 300 (Softer Saffron) */
+    --jaap-secondary: #424242;
+    /* Gray 800 */
+    --jaap-accent: #FFD54F;
+    /* Amber 300 */
+    --jaap-neutral: #9E9E9E;
+    /* Gray 500 */
+    --jaap-bg-pattern: #1E1E1E;
+    /* Dark Pattern */
+  }
 }
 
 :root {
