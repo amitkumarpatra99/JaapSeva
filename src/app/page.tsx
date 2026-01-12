@@ -144,20 +144,20 @@ export default function Home() {
   };
 
   return (
-    <main ref={containerRef} className="flex min-h-screen flex-col items-center justify-center p-4 md:p-6 relative overflow-hidden bg-background text-foreground transition-colors duration-500 font-sans selection:bg-jaap-primary/30">
+    <main ref={containerRef} className="flex min-h-[100dvh] flex-col items-center justify-center p-3 md:p-6 relative overflow-hidden bg-background text-foreground transition-colors duration-500 font-sans selection:bg-jaap-primary/30">
 
       {/* NEW Animated Spiritual Background */}
       <SpiritualBackground />
 
-      <div ref={contentRef} className="z-10 w-full max-w-md flex flex-col items-center gap-8 md:gap-12 py-8 opacity-0">
+      <div ref={contentRef} className="z-10 w-full max-w-md flex flex-col items-center gap-4 md:gap-12 py-4 md:py-8 opacity-0">
 
-        <div className="text-center space-y-2 relative anim-item">
+        <div className="text-center space-y-1 md:space-y-2 relative anim-item">
           {/* Header Glow */}
           <div className="absolute -inset-x-10 -inset-y-10 bg-white/40 blur-3xl rounded-full z-0 pointer-events-none" />
-          <h1 className="text-6xl font-serif font-bold tracking-tight text-jaap-primary relative z-10 drop-shadow-sm py-2">
+          <h1 className="text-4xl md:text-6xl font-serif font-bold tracking-tight text-jaap-primary relative z-10 drop-shadow-sm py-2">
             JaapSeva
           </h1>
-          <p className="text-xs text-jaap-neutral tracking-[0.4em] font-bold uppercase relative z-10 opacity-80">
+          <p className="text-[10px] md:text-xs text-jaap-neutral tracking-[0.4em] font-bold uppercase relative z-10 opacity-80">
             Mantra Counter
           </p>
         </div>

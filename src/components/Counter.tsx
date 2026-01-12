@@ -100,7 +100,7 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
     <div ref={containerRef} className="relative flex flex-col items-center justify-center py-12">
 
       {/* Main Container - Sized to the Ring for Perfect Alignment */}
-      <div className="relative flex items-center justify-center w-[min(80vw,300px)] h-[min(80vw,300px)]">
+      <div className="relative flex items-center justify-center w-[min(70vw,300px)] h-[min(70vw,300px)]">
 
         {/* 1. Ripple Effect (Behind Ring) */}
         <div
@@ -146,7 +146,7 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
         <button
           ref={buttonRef}
           className={cn(
-            "relative z-10 w-[min(60vw,224px)] h-[min(60vw,224px)] rounded-full flex flex-col items-center justify-center",
+            "relative z-10 w-[min(55vw,224px)] h-[min(55vw,224px)] rounded-full flex flex-col items-center justify-center",
             "bg-white backdrop-blur-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-white/50", // Clean white paper look like screenshot
             "select-none cursor-pointer outline-none",
             "touch-none active:scale-95 transition-transform", // Native press fallback + GSAP
@@ -163,13 +163,13 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
           <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white to-orange-50/30 pointer-events-none" />
 
           {/* Label */}
-          <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-jaap-neutral/60 mb-1 pointer-events-none relative z-20">
+          <span className="text-[8px] md:text-[10px] font-bold tracking-[0.25em] uppercase text-jaap-neutral/60 mb-1 pointer-events-none relative z-20">
             Count
           </span>
 
-          {/* Number Display */}
+          {/* Number Display - Custom Clamp for Font Size */}
           <span className={cn(
-            "text-7xl font-serif font-bold text-jaap-neutral tabular-nums tracking-tighter pointer-events-none drop-shadow-sm relative z-20", // Serif font matches screenshot style
+            "text-[clamp(3.5rem,15vw,4.5rem)] font-serif font-bold text-jaap-neutral tabular-nums tracking-tighter pointer-events-none drop-shadow-sm relative z-20", // Serif font matches screenshot style
           )}>
             {count}
           </span>

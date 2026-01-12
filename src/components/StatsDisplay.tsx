@@ -24,7 +24,7 @@ export default function StatsDisplay({
     return (
         <div className="w-full max-w-sm grid grid-cols-3 gap-2 md:gap-4 text-center">
             {/* Streak */}
-            <div className={cn(glassClass, "flex flex-col items-center p-3 transition-transform hover:scale-105 active:scale-95 duration-300")}>
+            <div className={cn(glassClass, "flex flex-col items-center p-2 md:p-3 transition-transform hover:scale-105 active:scale-95 duration-300")}>
                 <span className="text-2xl font-bold text-jaap-primary drop-shadow-sm flex items-center gap-1">
                     {streak} <Flame size={18} className="text-jaap-primary fill-jaap-primary/20" />
                 </span>
@@ -34,7 +34,7 @@ export default function StatsDisplay({
             </div>
 
             {/* Malas */}
-            <div className={cn(glassClass, "flex flex-col items-center p-3 transition-transform hover:scale-105 active:scale-95 duration-300")}>
+            <div className={cn(glassClass, "flex flex-col items-center p-2 md:p-3 transition-transform hover:scale-105 active:scale-95 duration-300")}>
                 <span className="text-2xl font-bold text-jaap-accent drop-shadow-sm flex items-center gap-1">
                     {malasCompleted} <Disc size={18} className="text-jaap-accent" />
                 </span>
@@ -44,7 +44,7 @@ export default function StatsDisplay({
             </div>
 
             {/* Lifetime */}
-            <div className={cn(glassClass, "flex flex-col items-center p-3 transition-transform hover:scale-105 active:scale-95 duration-300")}>
+            <div className={cn(glassClass, "flex flex-col items-center p-2 md:p-3 transition-transform hover:scale-105 active:scale-95 duration-300")}>
                 <span className="text-2xl font-bold text-jaap-secondary drop-shadow-sm flex items-center gap-1">
                     {totalCount} <BarChart3 size={18} className="text-jaap-secondary" />
                 </span>
