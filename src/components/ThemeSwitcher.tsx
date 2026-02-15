@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Monitor, Sun, Moon, Droplets, Leaf } from "lucide-react";
+import { Sun, Moon, Droplets, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ThemeSwitcher() {

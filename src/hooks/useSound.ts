@@ -51,7 +51,7 @@ export default function useSound(enabled: boolean = true, vibrationEnabled: bool
     osc.stop(now + 0.04);
 
     if (vibrationEnabled && navigator.vibrate) {
-       try { navigator.vibrate(5); } catch(e) {}
+       try { navigator.vibrate(5); } catch(_e) {}
     }
   }, [enabled, vibrationEnabled, initAudio]);
 
@@ -88,7 +88,7 @@ export default function useSound(enabled: boolean = true, vibrationEnabled: bool
     }
 
     if (vibrationEnabled && navigator.vibrate) {
-      try { navigator.vibrate([50, 50, 50, 50, 200]); } catch(e) {}
+      try { navigator.vibrate([50, 50, 50, 50, 200]); } catch(_e) {}
     }
   }, [enabled, vibrationEnabled, initAudio]);
 
@@ -119,7 +119,7 @@ export default function useSound(enabled: boolean = true, vibrationEnabled: bool
     osc.stop(now + 0.4);
 
     if (vibrationEnabled && navigator.vibrate) {
-        try { navigator.vibrate(10); } catch(e) {}
+        try { navigator.vibrate(10); } catch(_e) {}
      }
   }, [enabled, vibrationEnabled, initAudio]);
 
