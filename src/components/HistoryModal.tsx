@@ -5,12 +5,7 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-interface HistorySession {
-    id: string;
-    date: string; // ISO string
-    count: number;
-    target: number;
-}
+import { HistorySession } from "@/types";
 
 interface HistoryModalProps {
     isOpen: boolean;

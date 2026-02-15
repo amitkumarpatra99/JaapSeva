@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Counter from "@/components/Counter";
 import ControlPanel from "@/components/ControlPanel";
 import StatsDisplay from "@/components/StatsDisplay";
@@ -10,26 +10,34 @@ import SpiritualBackground from "@/components/SpiritualBackground";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import useSound from "@/hooks/useSound";
+import { useJaapCounter } from "@/hooks/useJaapCounter";
+import { useSettings } from "@/hooks/useSettings";
 
 gsap.registerPlugin(useGSAP);
 
 export default function Home() {
-  const [count, setCount] = useState(0);
-  const [target, setTarget] = useState(108);
-  const [streak, setStreak] = useState(0);
-  const [malasCompleted, setMalasCompleted] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [isLocked, setIsLocked] = useState(false);
-  const [history, setHistory] = useState<any[]>([]);
   const [showHistory, setShowHistory] = useState(false);
 
-  // Settings
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [hapticEnabled, setHapticEnabled] = useState(true);
-
-  // Sound Hook
+  // Custom Hooks
+  const { soundEnabled, setSoundEnabled, hapticEnabled, setHapticEnabled } = useSettings();
   const { playClick, playMalaComplete, playReset } = useSound(soundEnabled, hapticEnabled);
+
+  const {
+    count,
+    target,
+    setTarget,
+    streak,
+    malasCompleted,
+    totalCount,
+    history,
+    isLocked,
+    setIsLocked,
+    handleIncrement,
+    handleUndo,
+    confirmReset,
+    clearHistory
+  } = useJaapCounter(soundEnabled, hapticEnabled, playClick, playMalaComplete, playReset);
 
   // Refs for Animation
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,107 +48,27 @@ export default function Home() {
     // 1. Intro Animation Sequence
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    tl.fromTo(contentRef.current,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 1.2 }
-    )
-      .fromTo(".anim-item",
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 },
-        "-=0.8"
-      );
+    if (contentRef.current) {
+      tl.fromTo(contentRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1.2 }
+      )
+        .fromTo(".anim-item",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 },
+          "-=0.8"
+        );
+    }
 
   }, { scope: containerRef });
-
-  // Initialize from LocalStorage
-  useEffect(() => {
-    const savedCount = localStorage.getItem("jaap_count");
-    const savedTarget = localStorage.getItem("jaap_target");
-    const savedStreak = localStorage.getItem("jaap_streak");
-    const savedMalas = localStorage.getItem("jaap_malas");
-    const savedTotal = localStorage.getItem("jaap_total");
-    const savedHistory = localStorage.getItem("jaap_history");
-    const savedSound = localStorage.getItem("jaap_sound");
-    const savedHaptic = localStorage.getItem("jaap_haptic");
-
-    if (savedCount) setCount(parseInt(savedCount));
-    if (savedTarget) setTarget(parseInt(savedTarget));
-    if (savedStreak) setStreak(parseInt(savedStreak));
-    if (savedMalas) setMalasCompleted(parseInt(savedMalas));
-    if (savedTotal) setTotalCount(parseInt(savedTotal));
-    if (savedHistory) setHistory(JSON.parse(savedHistory));
-    if (savedSound !== null) setSoundEnabled(savedSound === "true");
-    if (savedHaptic !== null) setHapticEnabled(savedHaptic === "true");
-  }, []);
-
-  // Save Effect
-  useEffect(() => {
-    localStorage.setItem("jaap_count", count.toString());
-    localStorage.setItem("jaap_target", target.toString());
-    localStorage.setItem("jaap_streak", streak.toString());
-    localStorage.setItem("jaap_malas", malasCompleted.toString());
-    localStorage.setItem("jaap_total", totalCount.toString());
-    localStorage.setItem("jaap_history", JSON.stringify(history));
-    localStorage.setItem("jaap_sound", soundEnabled.toString());
-    localStorage.setItem("jaap_haptic", hapticEnabled.toString());
-  }, [count, target, streak, malasCompleted, totalCount, history, soundEnabled, hapticEnabled]);
-
-  const saveSession = () => {
-    const newSession = {
-      id: Date.now().toString(),
-      date: new Date().toISOString(),
-      count: target, // Assuming session saves when target reached
-      target: target,
-    };
-    setHistory((prev) => [...prev, newSession]);
-  };
-
-  const handleIncrement = () => {
-    if (isLocked) return;
-
-    // Determine if next count is completion
-    const newCount = count + 1;
-
-    // Play feedback BEFORE state update logic (re-render might delay slightly)
-    if (newCount === target) {
-      playMalaComplete();
-    } else {
-      playClick();
-    }
-
-    setCount(newCount);
-    setTotalCount((prev) => prev + 1);
-
-    if (newCount === target) {
-      // Mala Complete!
-      setMalasCompleted((prev) => prev + 1);
-      setStreak((prev) => prev + 1);
-      saveSession();
-      setCount(0); // Reset count after mala
-    }
-  };
-
-  const handleUndo = () => {
-    if (count > 0 && !isLocked) {
-      setCount((prev) => prev - 1);
-      setTotalCount((prev) => Math.max(0, prev - 1));
-      // Optional: Sound for undo? Maybe soft click.
-      playClick();
-    }
-  };
 
   const handleResetRequest = () => {
     if (!isLocked) setShowConfirm(true);
   };
 
-  const confirmReset = () => {
-    setCount(0);
+  const handleConfirmReset = () => {
+    confirmReset();
     setShowConfirm(false);
-    playReset();
-  };
-
-  const clearHistory = () => {
-    setHistory([]);
   };
 
   return (
@@ -222,7 +150,7 @@ export default function Home() {
       <ConfirmationModal
         isOpen={showConfirm}
         onClose={() => setShowConfirm(false)}
-        onConfirm={confirmReset}
+        onConfirm={handleConfirmReset}
         title="Reset Counter?"
         message="Are you sure you want to reset? This action cannot be undone."
       />
