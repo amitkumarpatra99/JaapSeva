@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>JaapSeva - Digital Mala Counter 📿</h1>
+  <h1>JaapSeva - Digital Mala 📿</h1>
   
   <p>
     <img src="https://img.shields.io/badge/version-2.0-blue.svg?style=flat-square" alt="Version 2.0" />
