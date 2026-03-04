@@ -14,9 +14,7 @@ export interface Mantra {
 
 export const MANTRAS: Mantra[] = [
   { id: "radha", name: "Radha Naam", sanskrit: "राधे राधे", symbol: "🌸", suggestedTarget: 108 },
-  { id: "mritunjaya", name: "Maha Mrityunjaya", sanskrit: "ॐ त्र्यम्बकं", symbol: "🔱", suggestedTarget: 108 },
-  { id: "ram", name: "Ram Naam", sanskrit: "श्री राम जय राम", symbol: "🪔", suggestedTarget: 108 },
-  { id: "hanuman", name: "Hanuman Chalisa", sanskrit: "श्री हनुमान", symbol: "🙏", suggestedTarget: 40 },
+  { id: "ram", name: "Ram Naam", sanskrit: "श्री राम", symbol: "🪔", suggestedTarget: 108 },
 ];
 
 interface ControlPanelProps {
