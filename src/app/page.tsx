@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Counter from "@/components/Counter";
-import ControlPanel from "@/components/ControlPanel";
+import ControlPanel, { MANTRAS, Mantra } from "@/components/ControlPanel";
 import StatsDisplay from "@/components/StatsDisplay";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import HistoryModal from "@/components/HistoryModal";
@@ -18,6 +18,7 @@ gsap.registerPlugin(useGSAP);
 export default function Home() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [selectedMantra, setSelectedMantra] = useState<Mantra>(MANTRAS[0]);
 
   // Custom Hooks
   const { soundEnabled, setSoundEnabled, hapticEnabled, setHapticEnabled } = useSettings();
@@ -88,6 +89,9 @@ export default function Home() {
           <p className="text-[10px] md:text-xs text-jaap-neutral tracking-[0.4em] font-bold uppercase relative z-10 opacity-80">
             Mantra Counter
           </p>
+          <p className="text-sm md:text-base text-jaap-primary/80 font-semibold relative z-10 tracking-wide transition-all duration-500">
+            {selectedMantra.symbol} {selectedMantra.sanskrit}
+          </p>
         </div>
 
         <div className={`anim-item ${isLocked ? "opacity-30 pointer-events-none transition-opacity duration-300" : "transition-opacity duration-300"}`}>
@@ -114,6 +118,8 @@ export default function Home() {
           <ControlPanel
             selectedTarget={target}
             onTargetSelect={(t) => { if (!isLocked) setTarget(t); }}
+            selectedMantra={selectedMantra}
+            onMantraSelect={(m) => setSelectedMantra(m)}
             onResetRequest={handleResetRequest}
             onUndo={handleUndo}
             onLockToggle={() => setIsLocked(!isLocked)}

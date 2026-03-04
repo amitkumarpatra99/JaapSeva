@@ -1,12 +1,29 @@
 "use client";
 
-import { RotateCcw, Lock, History, Volume2, VolumeX, Smartphone, Zap, ZapOff } from "lucide-react";
+import { RotateCcw, Lock, History, Volume2, VolumeX, Zap, ZapOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+
+export interface Mantra {
+  id: string;
+  name: string;
+  sanskrit: string;
+  symbol: string;
+  suggestedTarget: number;
+}
+
+export const MANTRAS: Mantra[] = [
+  { id: "radha", name: "Radha Naam", sanskrit: "राधे राधे", symbol: "🌸", suggestedTarget: 108 },
+  { id: "mritunjaya", name: "Maha Mrityunjaya", sanskrit: "ॐ त्र्यम्बकं", symbol: "🔱", suggestedTarget: 108 },
+  { id: "ram", name: "Ram Naam", sanskrit: "श्री राम जय राम", symbol: "🪔", suggestedTarget: 108 },
+  { id: "hanuman", name: "Hanuman Chalisa", sanskrit: "श्री हनुमान", symbol: "🙏", suggestedTarget: 40 },
+];
 
 interface ControlPanelProps {
   selectedTarget: number;
   onTargetSelect: (target: number) => void;
+  selectedMantra: Mantra;
+  onMantraSelect: (mantra: Mantra) => void;
   onResetRequest: () => void;
   onUndo: () => void;
   onLockToggle: () => void;
@@ -23,6 +40,8 @@ const PRESETS = [11, 108];
 export default function ControlPanel({
   selectedTarget,
   onTargetSelect,
+  selectedMantra,
+  onMantraSelect,
   onResetRequest,
   onUndo,
   onLockToggle,
@@ -42,7 +61,32 @@ export default function ControlPanel({
       {/* new: bg-white/10 backdrop-blur-2xl border-white/20 shadow... */}
       <div className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] rounded-[2rem] p-2 flex flex-col gap-2">
 
-        {/* Top Row: Presets */}
+        {/* Mantra Selector Row */}
+        <div className="flex items-center bg-white/5 rounded-[1.5rem] p-1.5 border border-white/10 gap-1 overflow-x-auto scrollbar-none">
+          {MANTRAS.map((mantra) => (
+            <button
+              key={mantra.id}
+              onClick={() => {
+                onMantraSelect(mantra);
+                if (!isLocked) onTargetSelect(mantra.suggestedTarget);
+              }}
+              disabled={isLocked}
+              title={mantra.sanskrit}
+              className={cn(
+                "flex-shrink-0 flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-[1.1rem] font-bold text-[9px] md:text-[10px] tracking-wider transition-all duration-300 min-w-[60px]",
+                selectedMantra.id === mantra.id
+                  ? "bg-black text-white shadow-md"
+                  : "text-black/60 hover:bg-black/5 hover:text-black",
+                isLocked && "opacity-50 cursor-not-allowed hover:bg-transparent"
+              )}
+            >
+              <span className="text-base leading-none">{mantra.symbol}</span>
+              <span className="leading-tight text-center whitespace-nowrap">{mantra.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Presets Row (count targets) */}
         <div className="flex justify-between items-center bg-white/5 rounded-[1.5rem] p-1.5 border border-white/10 gap-2">
           {PRESETS.map((target) => (
             <button
