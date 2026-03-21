@@ -2,12 +2,19 @@ import { useState, useEffect } from "react";
 import { STORAGE_KEYS, DEFAULTS } from "@/lib/constants";
 import { HistorySession } from "@/types";
 
+interface MantraInfo {
+  id: string;
+  name: string;
+  symbol: string;
+}
+
 export function useJaapCounter(
   soundEnabled: boolean,
   hapticEnabled: boolean,
   playClick: () => void,
   playMalaComplete: () => void,
-  playReset: () => void
+  playReset: () => void,
+  activeMantra?: MantraInfo
 ) {
   const [count, setCount] = useState(0);
   const [target, setTarget] = useState(DEFAULTS.TARGET);
@@ -50,6 +57,9 @@ export function useJaapCounter(
       date: new Date().toISOString(),
       count: target,
       target: target,
+      mantraId: activeMantra?.id,
+      mantraName: activeMantra?.name,
+      mantraSymbol: activeMantra?.symbol,
     };
     setHistory((prev) => [...prev, newSession]);
   };

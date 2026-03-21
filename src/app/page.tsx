@@ -38,7 +38,7 @@ export default function Home() {
     handleUndo,
     confirmReset,
     clearHistory
-  } = useJaapCounter(soundEnabled, hapticEnabled, playClick, playMalaComplete, playReset);
+  } = useJaapCounter(soundEnabled, hapticEnabled, playClick, playMalaComplete, playReset, selectedMantra);
 
   // Refs for Animation
   const containerRef = useRef<HTMLDivElement>(null);

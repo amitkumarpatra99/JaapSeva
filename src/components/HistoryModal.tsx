@@ -4,8 +4,8 @@ import { X, Calendar, Clock, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-
 import { HistorySession } from "@/types";
+import ConfirmationModal from "@/components/ConfirmationModal";
 
 interface HistoryModalProps {
     isOpen: boolean;
@@ -16,6 +16,7 @@ interface HistoryModalProps {
 
 export default function HistoryModal({ isOpen, onClose, history, onClearHistory }: HistoryModalProps) {
     const [mounted, setMounted] = useState(false);
+    const [showClearConfirm, setShowClearConfirm] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -66,6 +67,13 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory 
                                 className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center justify-between transition-all hover:bg-white/10"
                             >
                                 <div>
+                                    {/* Mantra badge */}
+                                    {session.mantraName && (
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-jaap-primary/80 mb-1 flex items-center gap-1">
+                                            <span>{session.mantraSymbol}</span>
+                                            <span>{session.mantraName}</span>
+                                        </p>
+                                    )}
                                     <p className="text-xs font-bold text-black/60 uppercase tracking-wider mb-1">
                                         {new Date(session.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                         <span className="mx-1">•</span>
@@ -86,7 +94,7 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory 
                 {/* Footer */}
                 <div className="p-4 border-t border-white/10 bg-white/5">
                     <button
-                        onClick={onClearHistory}
+                        onClick={() => setShowClearConfirm(true)}
                         disabled={history.length === 0}
                         className="w-full py-3 rounded-xl flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-black/60 hover:text-black hover:bg-black/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -95,6 +103,14 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory 
                 </div>
 
             </div>
+
+            <ConfirmationModal
+                isOpen={showClearConfirm}
+                onClose={() => setShowClearConfirm(false)}
+                onConfirm={() => { onClearHistory(); setShowClearConfirm(false); }}
+                title="Clear History?"
+                message="All session history will be permanently deleted. This cannot be undone."
+            />
         </div>,
         document.body
     );
