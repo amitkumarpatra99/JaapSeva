@@ -1,8 +1,10 @@
 "use client";
 
-import { RotateCcw, Lock, History, Volume2, VolumeX, Zap, ZapOff } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { RotateCcw, Lock, History, Volume2, VolumeX, Zap, ZapOff, Plus, Trash2 } from "lucide-react";
+import { cn, getCustomMantras, addCustomMantra, removeCustomMantra } from "@/lib/utils";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import AddMantraModal from "./AddMantraModal";
 
 export interface Mantra {
   id: string;
@@ -15,6 +17,18 @@ export interface Mantra {
 export const MANTRAS: Mantra[] = [
   { id: "radha", name: "Radha Naam", sanskrit: "राधे राधे", symbol: "🌸", suggestedTarget: 108 },
   { id: "ram", name: "Ram Naam", sanskrit: "श्री राम", symbol: "🪔", suggestedTarget: 108 },
+  { id: "om", name: "Om", sanskrit: "ॐ", symbol: "🕉️", suggestedTarget: 108 },
+  { id: "hare-krishna", name: "Hare Krishna", sanskrit: "हरे कृष्ण", symbol: "🐂", suggestedTarget: 108 },
+  { id: "gayatri", name: "Gayatri Mantra", sanskrit: "गायत्री मंत्र", symbol: "📿", suggestedTarget: 108 },
+  { id: "mahamrityunjaya", name: "Mahamrityunjaya", sanskrit: "महामृत्युंजय", symbol: "🕉️", suggestedTarget: 108 },
+  { id: "hanuman", name: "Hanuman Chalisa", sanskrit: "हनुमान चालीसा", symbol: "🐒", suggestedTarget: 108 },
+  { id: "shiva", name: "Om Namah Shivaya", sanskrit: "ॐ नमः शिवाय", symbol: "🕉️", suggestedTarget: 108 },
+  { id: "vishnu", name: "Om Namo Narayanaya", sanskrit: "ॐ नमो नारायणाय", symbol: "🐚", suggestedTarget: 108 },
+  { id: "lakshmi", name: "Om Shreem Mahalakshmiyei Namaha", sanskrit: "ॐ श्रीं महालक्ष्म्यै नमः", symbol: "💰", suggestedTarget: 108 },
+  { id: "saraswati", name: "Om Aim Saraswatiyei Namaha", sanskrit: "ॐ ऐं सरस्वत्यै नमः", symbol: "📚", suggestedTarget: 108 },
+  { id: "durga", name: "Om Dum Durgaye Namaha", sanskrit: "ॐ दूं दुर्गायै नमः", symbol: "🗡️", suggestedTarget: 108 },
+  { id: "ganesh", name: "Om Gam Ganapataye Namaha", sanskrit: "ॐ गं गणपतये नमः", symbol: "🐘", suggestedTarget: 108 },
+  { id: "krishna", name: "Om Kleem Shum Shukraya Namaha", sanskrit: "ॐ क्लीं शुं शुक्राय नमः", symbol: "🪈", suggestedTarget: 108 },
 ];
 
 interface ControlPanelProps {
@@ -50,6 +64,30 @@ export default function ControlPanel({
   hapticEnabled,
   onToggleHaptic,
 }: ControlPanelProps) {
+  const [customMantras, setCustomMantras] = useState<Mantra[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  useEffect(() => {
+    setCustomMantras(getCustomMantras());
+  }, []);
+
+  const handleAddMantra = (newMantra: Omit<Mantra, "id">) => {
+    const addedMantra = addCustomMantra(newMantra);
+    setCustomMantras(prev => [...prev, addedMantra]);
+  };
+
+  const handleRemoveMantra = (id: string) => {
+    removeCustomMantra(id);
+    setCustomMantras(prev => prev.filter(m => m.id !== id));
+    // If the removed mantra was selected, select the first default mantra
+    if (selectedMantra.id === id) {
+      onMantraSelect(MANTRAS[0]);
+      if (!isLocked) onTargetSelect(MANTRAS[0].suggestedTarget);
+    }
+  };
+
+  const allMantras = [...MANTRAS, ...customMantras];
+
   return (
 
     <div className="w-full max-w-sm flex flex-col items-center animate-in slide-in-from-bottom-8 duration-700 delay-200">
@@ -61,27 +99,52 @@ export default function ControlPanel({
 
         {/* Mantra Selector Row */}
         <div className="flex items-center bg-white/5 rounded-[1.5rem] p-1.5 border border-white/10 gap-1 overflow-x-auto scrollbar-none">
-          {MANTRAS.map((mantra) => (
-            <button
-              key={mantra.id}
-              onClick={() => {
-                onMantraSelect(mantra);
-                if (!isLocked) onTargetSelect(mantra.suggestedTarget);
-              }}
-              disabled={isLocked}
-              title={mantra.sanskrit}
-              className={cn(
-                "flex-shrink-0 flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-[1.1rem] font-bold text-[9px] md:text-[10px] tracking-wider transition-all duration-300 min-w-[60px]",
-                selectedMantra.id === mantra.id
-                  ? "bg-black text-white shadow-md"
-                  : "text-black/60 hover:bg-black/5 hover:text-black",
-                isLocked && "opacity-50 cursor-not-allowed hover:bg-transparent"
+          {allMantras.map((mantra) => (
+            <div key={mantra.id} className="relative flex-shrink-0">
+              <button
+                onClick={() => {
+                  onMantraSelect(mantra);
+                  if (!isLocked) onTargetSelect(mantra.suggestedTarget);
+                }}
+                disabled={isLocked}
+                title={mantra.sanskrit}
+                className={cn(
+                  "flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-[1.1rem] font-bold text-[9px] md:text-[10px] tracking-wider transition-all duration-300 min-w-[60px]",
+                  selectedMantra.id === mantra.id
+                    ? "bg-black text-white shadow-md"
+                    : "text-black/60 hover:bg-black/5 hover:text-black",
+                  isLocked && "opacity-50 cursor-not-allowed hover:bg-transparent"
+                )}
+              >
+                <span className="text-base leading-none">{mantra.symbol}</span>
+                <span className="leading-tight text-center whitespace-nowrap">{mantra.name}</span>
+              </button>
+              {mantra.id.startsWith("custom-") && (
+                <button
+                  onClick={() => handleRemoveMantra(mantra.id)}
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                  title="Remove custom mantra"
+                >
+                  <Trash2 size={8} />
+                </button>
               )}
-            >
-              <span className="text-base leading-none">{mantra.symbol}</span>
-              <span className="leading-tight text-center whitespace-nowrap">{mantra.name}</span>
-            </button>
+            </div>
           ))}
+
+          {/* Add Custom Mantra Button */}
+          <button
+            onClick={() => setShowAddModal(true)}
+            disabled={isLocked}
+            className={cn(
+              "flex-shrink-0 flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-[1.1rem] font-bold text-[9px] md:text-[10px] tracking-wider transition-all duration-300 min-w-[60px] border-2 border-dashed",
+              "text-black/60 hover:bg-black/5 hover:text-black border-black/20 hover:border-black/40",
+              isLocked && "opacity-50 cursor-not-allowed hover:bg-transparent"
+            )}
+            title="Add custom mantra"
+          >
+            <Plus size={16} />
+            <span className="leading-tight text-center whitespace-nowrap">Add</span>
+          </button>
         </div>
 
         {/* Presets Row (count targets) */}
@@ -191,6 +254,13 @@ export default function ControlPanel({
       <div className="mt-4">
         <ThemeSwitcher />
       </div>
+
+      {/* Add Mantra Modal */}
+      <AddMantraModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAdd={handleAddMantra}
+      />
     </div >
   );
 }
