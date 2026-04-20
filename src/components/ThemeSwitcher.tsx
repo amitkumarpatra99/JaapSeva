@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Sun, Moon, Droplets, Leaf } from "lucide-react";
+import { Sun, Sparkles, Droplets, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ThemeSwitcher() {
@@ -53,9 +53,9 @@ export function ThemeSwitcher() {
                     "p-2 rounded-xl transition-all hover:bg-white/10",
                     theme === "dark" ? "bg-white/20 text-jaap-primary shadow-sm" : "text-jaap-neutral/60"
                 )}
-                title="Dark"
+                title="Temple (Spiritual)"
             >
-                <Moon size={16} />
+                <Sparkles size={16} />
             </button>
         </div>
     );

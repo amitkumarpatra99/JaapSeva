@@ -13,24 +13,27 @@ interface AddMantraModalProps {
 
 export default function AddMantraModal({ isOpen, onClose, onAdd }: AddMantraModalProps) {
   const [name, setName] = useState("");
-  const [sanskrit, setSanskrit] = useState("");
+  const [hindi, setHindi] = useState("");
+  const [english, setEnglish] = useState("");
   const [symbol, setSymbol] = useState("");
   const [suggestedTarget, setSuggestedTarget] = useState(108);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !sanskrit.trim()) return;
+    if (!name.trim() || !hindi.trim() || !english.trim()) return;
 
     onAdd({
       name: name.trim(),
-      sanskrit: sanskrit.trim(),
+      hindi: hindi.trim(),
+      english: english.trim(),
       symbol: symbol || "📿",
       suggestedTarget,
     });
 
     // Reset form
     setName("");
-    setSanskrit("");
+    setHindi("");
+    setEnglish("");
     setSymbol("");
     setSuggestedTarget(108);
     onClose();
@@ -68,13 +71,27 @@ export default function AddMantraModal({ isOpen, onClose, onAdd }: AddMantraModa
 
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
-              Sanskrit Text *
+              Hindi Text *
             </label>
             <input
               type="text"
-              value={sanskrit}
-              onChange={(e) => setSanskrit(e.target.value)}
+              value={hindi}
+              onChange={(e) => setHindi(e.target.value)}
               placeholder="e.g., ॐ शांति"
+              className="w-full px-3 py-2 border border-jaap-primary/30 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-jaap-primary focus:border-jaap-primary placeholder:text-foreground/50"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              English Text *
+            </label>
+            <input
+              type="text"
+              value={english}
+              onChange={(e) => setEnglish(e.target.value)}
+              placeholder="e.g., Om Shanti"
               className="w-full px-3 py-2 border border-jaap-primary/30 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-jaap-primary focus:border-jaap-primary placeholder:text-foreground/50"
               required
             />

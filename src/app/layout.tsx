@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "JaapSeva - Japa Counter & Tracker",
+  title: "JaapSeva",
   description: "A peaceful Japa counter for your daily spiritual practice.",
 };
 

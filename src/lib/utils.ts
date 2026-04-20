@@ -13,7 +13,19 @@ export function getCustomMantras(): Mantra[] {
   if (typeof window === "undefined") return [];
   try {
     const stored = localStorage.getItem(CUSTOM_MANTRAS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+
+    const parsed = JSON.parse(stored);
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed.map((mantra: any) => ({
+      id: mantra.id || `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      name: mantra.name || "",
+      hindi: mantra.hindi || "",
+      english: mantra.english || mantra.sanskrit || "",
+      symbol: mantra.symbol || "📿",
+      suggestedTarget: typeof mantra.suggestedTarget === "number" ? mantra.suggestedTarget : 108,
+    }));
   } catch {
     return [];
   }

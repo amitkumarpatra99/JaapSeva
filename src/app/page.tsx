@@ -90,7 +90,10 @@ export default function Home() {
             Mantra Counter
           </p>
           <p className="text-sm md:text-base text-jaap-primary/80 font-semibold relative z-10 tracking-wide transition-all duration-500">
-            {selectedMantra.symbol} {selectedMantra.sanskrit}
+            {selectedMantra.symbol} {selectedMantra.hindi}
+          </p>
+          <p className="text-xs md:text-sm text-jaap-neutral/80 relative z-10 tracking-wide transition-all duration-500">
+            {selectedMantra.english}
           </p>
         </div>
 

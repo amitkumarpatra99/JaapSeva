@@ -69,20 +69,20 @@
   }
 
   .dark {
-    --background: #121212;
-    /* Dark Gray */
-    --foreground: #E0E0E0;
-    /* Light Gray */
-    --jaap-primary: #FFB74D;
-    /* Orange 300 (Softer Saffron) */
-    --jaap-secondary: #424242;
-    /* Gray 800 */
-    --jaap-accent: #FFD54F;
-    /* Amber 300 */
-    --jaap-neutral: #9E9E9E;
-    /* Gray 500 */
-    --jaap-bg-pattern: #1E1E1E;
-    /* Dark Pattern */
+    --background: #2D1B1B;
+    /* Deep Burgundy - Sacred Temple */
+    --foreground: #F5E6D3;
+    /* Soft Cream - Purity */
+    --jaap-primary: #D4AF37;
+    /* Gold - Prosperity & Divine */
+    --jaap-secondary: #8B6F47;
+    /* Bronze - Spiritual Warmth */
+    --jaap-accent: #E8C547;
+    /* Bright Gold - Illumination */
+    --jaap-neutral: #9B7D6B;
+    /* Warm Taupe - Earthy Wisdom */
+    --jaap-bg-pattern: #3D2B2B;
+    /* Deep Burgundy Pattern */
   }
 }
 

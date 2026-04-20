@@ -9,27 +9,111 @@ import AddMantraModal from "./AddMantraModal";
 export interface Mantra {
   id: string;
   name: string;
-  sanskrit: string;
+  hindi: string;
+  english: string;
   symbol: string;
   suggestedTarget: number;
 }
 
 export const MANTRAS: Mantra[] = [
-  { id: "radha", name: "Radha Naam", sanskrit: "Radhe Radhe", symbol: "🌸", suggestedTarget: 108 },
-  { id: "ram", name: "Ram Naam", sanskrit: "Sri Ram", symbol: "🪔", suggestedTarget: 108 },
-  { id: "om", name: "Om", sanskrit: "Om", symbol: "🕉️", suggestedTarget: 108 },
-  { id: "hare-krishna", name: "Hare Krishna", sanskrit: "Hare Krishna", symbol: "🐂", suggestedTarget: 108 },
-  { id: "gayatri", name: "Gayatri Mantra", sanskrit: "Gayatri Mantra", symbol: "📿", suggestedTarget: 108 },
-  { id: "mahamrityunjaya", name: "Mahamrityunjaya", sanskrit: "Mahamrityunjaya", symbol: "🕉️", suggestedTarget: 108 },
-  { id: "hanuman", name: "Hanuman Chalisa", sanskrit: "Hanuman Chalisa", symbol: "🐒", suggestedTarget: 108 },
-  { id: "shiva", name: "Om Namah Shivaya", sanskrit: "Om Namah Shivaya", symbol: "🕉️", suggestedTarget: 108 },
-  { id: "vishnu", name: "Om Namo Narayanaya", sanskrit: "Om Namo Narayanaya", symbol: "🐚", suggestedTarget: 108 },
-  { id: "lakshmi", name: "Om Shreem Mahalakshmiyei Namaha", sanskrit: "Om Shreem Mahalakshmiyei Namaha", symbol: "💰", suggestedTarget: 108 },
-  { id: "saraswati", name: "Om Aim Saraswatiyei Namaha", sanskrit: "Om Aim Saraswatiyei Namaha", symbol: "📚", suggestedTarget: 108 },
-  { id: "durga", name: "Om Dum Durgaye Namaha", sanskrit: "Om Dum Durgaye Namaha", symbol: "🗡️", suggestedTarget: 108 },
-  { id: "ganesh", name: "Om Gam Ganapataye Namaha", sanskrit: "Om Gam Ganapataye Namaha", symbol: "🐘", suggestedTarget: 108 },
-  { id: "krishna", name: "Om Kleem Shum Shukraya Namaha", sanskrit: "Om Kleem Shum Shukraya Namaha", symbol: "🪈", suggestedTarget: 108 },
+  {
+    id: "radha",
+    name: "Radha Naam",
+    hindi: "राधा राधा",
+    english: "Radha Radha",
+    symbol: "🌸",
+    suggestedTarget: 108
+  },
+  {
+    id: "ram",
+    name: "Ram Naam",
+    hindi: "श्री राम",
+    english: "Sri Ram",
+    symbol: "🏹",
+    suggestedTarget: 108
+  },
+  {
+    id: "ganesh",
+    name: "Ganesha Mantra",
+    hindi: "ॐ गं गणपतये नमः",
+    english: "Om Gam Ganapataye Namaha",
+    symbol: "🐘",
+    suggestedTarget: 108
+  },
+  {
+    id: "hanuman",
+    name: "Hanuman Mantra",
+    hindi: "ॐ हनुमते नमः",
+    english: "Om Hanumate Namaha",
+    symbol: "🐒",
+    suggestedTarget: 108
+  },
+  {
+    id: "krishna",
+    name: "Krishna Mantra",
+    hindi: "ॐ नमो भगवते वासुदेवाय",
+    english: "Om Namo Bhagavate Vasudevaya",
+    symbol: "🪈",
+    suggestedTarget: 108
+  },
+  {
+    id: "shiva",
+    name: "Shiva Panchakshari",
+    hindi: "ॐ नमः शिवाय",
+    english: "Om Namah Shivaya",
+    symbol: "🌙",
+    suggestedTarget: 108
+  },
+  {
+    id: "om",
+    name: "Om",
+    hindi: "ॐ",
+    english: "Omm",
+    symbol: "ॐ",
+    suggestedTarget: 108
+  },
+  {
+    id: "hare-krishna",
+    name: "Hare Krishna Mahamantra",
+    hindi: "हरे कृष्ण हरे कृष्ण, कृष्ण कृष्ण हरे हरे, हरे राम हरे राम, राम राम हरे हरे",
+    english: "Hare Krishna Hare Krishna, Krishna Krishna Hare Hare, Hare Rama Hare Rama, Rama Rama Hare Hare",
+    symbol: "🦚",
+    suggestedTarget: 108
+  },
+  {
+    id: "gayatri",
+    name: "Gayatri Mantra",
+    hindi: "ॐ भूर्भुवः स्वः, तत्सवितुर्वरेण्यं, भर्गो देवस्य धीमहि, धियो यो नः प्रचोदयात्",
+    english: "Om Bhur Bhuva Svaha, Tat Savitur Varenyam, Bhargo Devasya Dhimahi, Dhiyo Yo Nah Prachodayat",
+    symbol: "☀️",
+    suggestedTarget: 108
+  },
+  {
+    id: "mahamrityunjaya",
+    name: "Mahamrityunjaya",
+    hindi: "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्, उर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्",
+    english: "Om Tryambakam Yajamahe Sugandhim Pushti-Vardhanam, Urvarukamiva Bandhanan Mrityormukshiya Maamritat",
+    symbol: "🔱",
+    suggestedTarget: 108
+  },
+  {
+    id: "lakshmi",
+    name: "Lakshmi Mantra",
+    hindi: "ॐ श्रीं महालक्ष्म्यै नमः",
+    english: "Om Shreem Mahalakshmyai Namaha",
+    symbol: "🪷",
+    suggestedTarget: 108
+  },
+  {
+    id: "saraswati",
+    name: "Saraswati Mantra",
+    hindi: "ॐ ऐं सरस्वत्यै नमः",
+    english: "Om Aim Saraswatyai Namaha",
+    symbol: "🦢",
+    suggestedTarget: 108
+  },
 ];
+
 
 interface ControlPanelProps {
   selectedTarget: number;
@@ -107,7 +191,7 @@ export default function ControlPanel({
                   if (!isLocked) onTargetSelect(mantra.suggestedTarget);
                 }}
                 disabled={isLocked}
-                title={mantra.sanskrit}
+                title={`${mantra.hindi} • ${mantra.english}`}
                 className={cn(
                   "flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-[1.1rem] font-bold text-[9px] md:text-[10px] tracking-wider transition-all duration-300 min-w-[60px]",
                   selectedMantra.id === mantra.id
