@@ -98,7 +98,7 @@ export default function ControlPanel({
       <div className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] rounded-[2rem] p-2 flex flex-col gap-2">
 
         {/* Mantra Selector Row */}
-        <div className="flex items-center bg-white/5 rounded-[1.5rem] p-1.5 border border-white/10 gap-1 overflow-x-auto scrollbar-none">
+        <div className="flex items-center bg-jaap-primary/5 rounded-[1.5rem] p-1.5 border border-jaap-primary/20 gap-1 overflow-x-auto scrollbar-none">
           {allMantras.map((mantra) => (
             <div key={mantra.id} className="relative flex-shrink-0">
               <button
@@ -111,8 +111,8 @@ export default function ControlPanel({
                 className={cn(
                   "flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-[1.1rem] font-bold text-[9px] md:text-[10px] tracking-wider transition-all duration-300 min-w-[60px]",
                   selectedMantra.id === mantra.id
-                    ? "bg-black text-white shadow-md"
-                    : "text-black/60 hover:bg-black/5 hover:text-black",
+                    ? "bg-jaap-primary text-background shadow-md"
+                    : "text-foreground/60 hover:bg-jaap-primary/10 hover:text-foreground",
                   isLocked && "opacity-50 cursor-not-allowed hover:bg-transparent"
                 )}
               >
@@ -137,7 +137,7 @@ export default function ControlPanel({
             disabled={isLocked}
             className={cn(
               "flex-shrink-0 flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-[1.1rem] font-bold text-[9px] md:text-[10px] tracking-wider transition-all duration-300 min-w-[60px] border-2 border-dashed",
-              "text-black/60 hover:bg-black/5 hover:text-black border-black/20 hover:border-black/40",
+              "text-foreground/60 hover:bg-jaap-primary/10 hover:text-foreground border-foreground/20 hover:border-jaap-primary/40",
               isLocked && "opacity-50 cursor-not-allowed hover:bg-transparent"
             )}
             title="Add custom mantra"
@@ -148,7 +148,7 @@ export default function ControlPanel({
         </div>
 
         {/* Presets Row (count targets) */}
-        <div className="flex justify-between items-center bg-white/5 rounded-[1.5rem] p-1.5 border border-white/10 gap-2">
+        <div className="flex justify-between items-center bg-jaap-primary/5 rounded-[1.5rem] p-1.5 border border-jaap-primary/20 gap-2">
           {PRESETS.map((target) => (
             <button
               key={target}
@@ -157,8 +157,8 @@ export default function ControlPanel({
               className={cn(
                 "flex-1 py-4 md:py-3 rounded-[1.2rem] font-bold text-sm md:text-xs tracking-wider transition-all duration-300",
                 selectedTarget === target
-                  ? "bg-black text-white shadow-md scale-100"
-                  : "text-black/60 hover:bg-black/5 hover:text-black",
+                  ? "bg-jaap-primary text-background shadow-md scale-100"
+                  : "text-foreground/60 hover:bg-jaap-primary/10 hover:text-foreground",
                 isLocked && "opacity-50 cursor-not-allowed hover:bg-transparent"
               )}
             >
@@ -175,7 +175,7 @@ export default function ControlPanel({
             <button
               onClick={onUndo}
               disabled={isLocked}
-              className="flex-1 flex justify-center items-center gap-2 text-black/60 hover:text-black transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-black/5 group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 flex justify-center items-center gap-2 text-foreground/60 hover:text-foreground transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-jaap-primary/10 group disabled:opacity-50 disabled:cursor-not-allowed"
               title="Undo"
             >
               <RotateCcw size={18} className="-scale-x-100 group-hover:-rotate-12 transition-transform" />
@@ -183,14 +183,14 @@ export default function ControlPanel({
 
             <button
               onClick={onShowHistory}
-              className="flex-1 flex justify-center items-center gap-2 text-black/60 hover:text-black transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-black/5"
+              className="flex-1 flex justify-center items-center gap-2 text-foreground/60 hover:text-foreground transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-jaap-primary/10"
               title="History"
             >
               <History size={18} />
             </button>
           </div>
 
-          <div className="w-px h-8 bg-black/10" />
+          <div className="w-px h-8 bg-foreground/10" />
 
           {/* Center Lock */}
           <button
@@ -198,8 +198,8 @@ export default function ControlPanel({
             className={cn(
               "flex-[1.5] flex justify-center items-center gap-2 transition-all text-xs font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl border shadow-sm mx-1",
               isLocked
-                ? "bg-black text-white border-black/10 shadow-md"
-                : "bg-white/10 text-black hover:text-black/70 hover:bg-white/30 border-white/20 hover:shadow-md active:scale-95"
+                ? "bg-jaap-primary text-background border-jaap-primary/20 shadow-md"
+                : "bg-jaap-primary/5 text-foreground hover:text-foreground/80 hover:bg-jaap-primary/10 border-jaap-primary/20 hover:shadow-md active:scale-95"
             )}
           >
             <Lock size={18} />
@@ -208,7 +208,7 @@ export default function ControlPanel({
             <span className="md:hidden">{isLocked ? "Unlock" : "Lock"}</span>
           </button>
 
-          <div className="w-px h-8 bg-black/10" />
+          <div className="w-px h-8 bg-foreground/10" />
 
           {/* Right Group: Sound, Haptic, Reset */}
           <div className="flex flex-[1.5] gap-1">
@@ -217,8 +217,8 @@ export default function ControlPanel({
             <button
               onClick={onToggleSound}
               className={cn(
-                "flex-1 flex justify-center items-center gap-2 transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-black/5",
-                soundEnabled ? "text-black" : "text-black/40"
+                "flex-1 flex justify-center items-center gap-2 transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-jaap-primary/10",
+                soundEnabled ? "text-foreground" : "text-foreground/40"
               )}
               title={soundEnabled ? "Mute Sound" : "Enable Sound"}
             >
@@ -229,8 +229,8 @@ export default function ControlPanel({
             <button
               onClick={onToggleHaptic}
               className={cn(
-                "flex-1 flex justify-center items-center gap-2 transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-black/5",
-                hapticEnabled ? "text-black" : "text-black/40"
+                "flex-1 flex justify-center items-center gap-2 transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-jaap-primary/10",
+                hapticEnabled ? "text-foreground" : "text-foreground/40"
               )}
               title={hapticEnabled ? "Disable Vibration" : "Enable Vibration"}
             >
@@ -240,7 +240,7 @@ export default function ControlPanel({
             {/* Reset */}
             <button
               onClick={onResetRequest}
-              className="flex-1 flex justify-center items-center gap-2 text-black/60 hover:text-red-600 transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-black/5 group"
+              className="flex-1 flex justify-center items-center gap-2 text-foreground/60 hover:text-red-500 transition-all text-[10px] font-bold uppercase tracking-widest py-4 md:py-3 rounded-2xl hover:bg-jaap-primary/10 group"
               title="Reset"
             >
               <RotateCcw size={18} className="group-hover:rotate-180 transition-transform duration-500" />
