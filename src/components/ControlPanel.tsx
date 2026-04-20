@@ -15,20 +15,20 @@ export interface Mantra {
 }
 
 export const MANTRAS: Mantra[] = [
-  { id: "radha", name: "Radha Naam", sanskrit: "राधे राधे", symbol: "🌸", suggestedTarget: 108 },
-  { id: "ram", name: "Ram Naam", sanskrit: "श्री राम", symbol: "🪔", suggestedTarget: 108 },
-  { id: "om", name: "Om", sanskrit: "ॐ", symbol: "🕉️", suggestedTarget: 108 },
-  { id: "hare-krishna", name: "Hare Krishna", sanskrit: "हरे कृष्ण", symbol: "🐂", suggestedTarget: 108 },
-  { id: "gayatri", name: "Gayatri Mantra", sanskrit: "गायत्री मंत्र", symbol: "📿", suggestedTarget: 108 },
-  { id: "mahamrityunjaya", name: "Mahamrityunjaya", sanskrit: "महामृत्युंजय", symbol: "🕉️", suggestedTarget: 108 },
-  { id: "hanuman", name: "Hanuman Chalisa", sanskrit: "हनुमान चालीसा", symbol: "🐒", suggestedTarget: 108 },
-  { id: "shiva", name: "Om Namah Shivaya", sanskrit: "ॐ नमः शिवाय", symbol: "🕉️", suggestedTarget: 108 },
-  { id: "vishnu", name: "Om Namo Narayanaya", sanskrit: "ॐ नमो नारायणाय", symbol: "🐚", suggestedTarget: 108 },
-  { id: "lakshmi", name: "Om Shreem Mahalakshmiyei Namaha", sanskrit: "ॐ श्रीं महालक्ष्म्यै नमः", symbol: "💰", suggestedTarget: 108 },
-  { id: "saraswati", name: "Om Aim Saraswatiyei Namaha", sanskrit: "ॐ ऐं सरस्वत्यै नमः", symbol: "📚", suggestedTarget: 108 },
-  { id: "durga", name: "Om Dum Durgaye Namaha", sanskrit: "ॐ दूं दुर्गायै नमः", symbol: "🗡️", suggestedTarget: 108 },
-  { id: "ganesh", name: "Om Gam Ganapataye Namaha", sanskrit: "ॐ गं गणपतये नमः", symbol: "🐘", suggestedTarget: 108 },
-  { id: "krishna", name: "Om Kleem Shum Shukraya Namaha", sanskrit: "ॐ क्लीं शुं शुक्राय नमः", symbol: "🪈", suggestedTarget: 108 },
+  { id: "radha", name: "Radha Naam", sanskrit: "Radhe Radhe", symbol: "🌸", suggestedTarget: 108 },
+  { id: "ram", name: "Ram Naam", sanskrit: "Sri Ram", symbol: "🪔", suggestedTarget: 108 },
+  { id: "om", name: "Om", sanskrit: "Om", symbol: "🕉️", suggestedTarget: 108 },
+  { id: "hare-krishna", name: "Hare Krishna", sanskrit: "Hare Krishna", symbol: "🐂", suggestedTarget: 108 },
+  { id: "gayatri", name: "Gayatri Mantra", sanskrit: "Gayatri Mantra", symbol: "📿", suggestedTarget: 108 },
+  { id: "mahamrityunjaya", name: "Mahamrityunjaya", sanskrit: "Mahamrityunjaya", symbol: "🕉️", suggestedTarget: 108 },
+  { id: "hanuman", name: "Hanuman Chalisa", sanskrit: "Hanuman Chalisa", symbol: "🐒", suggestedTarget: 108 },
+  { id: "shiva", name: "Om Namah Shivaya", sanskrit: "Om Namah Shivaya", symbol: "🕉️", suggestedTarget: 108 },
+  { id: "vishnu", name: "Om Namo Narayanaya", sanskrit: "Om Namo Narayanaya", symbol: "🐚", suggestedTarget: 108 },
+  { id: "lakshmi", name: "Om Shreem Mahalakshmiyei Namaha", sanskrit: "Om Shreem Mahalakshmiyei Namaha", symbol: "💰", suggestedTarget: 108 },
+  { id: "saraswati", name: "Om Aim Saraswatiyei Namaha", sanskrit: "Om Aim Saraswatiyei Namaha", symbol: "📚", suggestedTarget: 108 },
+  { id: "durga", name: "Om Dum Durgaye Namaha", sanskrit: "Om Dum Durgaye Namaha", symbol: "🗡️", suggestedTarget: 108 },
+  { id: "ganesh", name: "Om Gam Ganapataye Namaha", sanskrit: "Om Gam Ganapataye Namaha", symbol: "🐘", suggestedTarget: 108 },
+  { id: "krishna", name: "Om Kleem Shum Shukraya Namaha", sanskrit: "Om Kleem Shum Shukraya Namaha", symbol: "🪈", suggestedTarget: 108 },
 ];
 
 interface ControlPanelProps {
