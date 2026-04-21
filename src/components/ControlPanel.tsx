@@ -38,7 +38,7 @@ export const MANTRAS: Mantra[] = [
     hindi: "ॐ गं गणपतये नमः",
     english: "Om Gam Ganapataye Namaha",
     symbol: "🐘",
-    suggestedTarget: 108
+    suggestedTarget: 11
   },
   {
     id: "hanuman",
@@ -94,7 +94,7 @@ export const MANTRAS: Mantra[] = [
     hindi: "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्, उर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्",
     english: "Om Tryambakam Yajamahe Sugandhim Pushti-Vardhanam, Urvarukamiva Bandhanan Mrityormukshiya Maamritat",
     symbol: "🔱",
-    suggestedTarget: 108
+    suggestedTarget: 11
   },
   {
     id: "lakshmi",
@@ -102,7 +102,7 @@ export const MANTRAS: Mantra[] = [
     hindi: "ॐ श्रीं महालक्ष्म्यै नमः",
     english: "Om Shreem Mahalakshmyai Namaha",
     symbol: "🪷",
-    suggestedTarget: 108
+    suggestedTarget: 11
   },
   {
     id: "saraswati",
@@ -110,7 +110,7 @@ export const MANTRAS: Mantra[] = [
     hindi: "ॐ ऐं सरस्वत्यै नमः",
     english: "Om Aim Saraswatyai Namaha",
     symbol: "🦢",
-    suggestedTarget: 108
+    suggestedTarget: 7
   },
 ];
 
@@ -131,7 +131,7 @@ interface ControlPanelProps {
   onToggleHaptic: () => void;
 }
 
-const PRESETS = [11, 108];
+const PRESETS = [7, 11, 108];
 
 export default function ControlPanel({
   selectedTarget,
@@ -182,7 +182,7 @@ export default function ControlPanel({
       <div className="w-full bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] rounded-[2rem] p-2 flex flex-col gap-2">
 
         {/* Mantra Selector Row */}
-        <div className="flex items-center bg-jaap-primary/5 rounded-[1.5rem] p-1.5 border border-jaap-primary/20 gap-1 overflow-x-auto scrollbar-none">
+        <div className="flex items-center bg-jaap-primary/5 rounded-[1.5rem] p-1.5 border border-jaap-primary/20 gap-1 overflow-x-auto custom-scrollbar">
           {allMantras.map((mantra) => (
             <div key={mantra.id} className="relative flex-shrink-0">
               <button
