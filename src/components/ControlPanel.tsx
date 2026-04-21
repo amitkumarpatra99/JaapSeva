@@ -61,7 +61,7 @@ export const MANTRAS: Mantra[] = [
     name: "Shiva Panchakshari",
     hindi: "ॐ नमः शिवाय",
     english: "Om Namah Shivaya",
-    symbol: "🌙",
+    symbol: "🔱",
     suggestedTarget: 108
   },
   {

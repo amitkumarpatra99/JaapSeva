@@ -24,6 +24,7 @@
     /* Deep Warm Brown */
     --jaap-primary: #FF9933;
     /* Saffron (Bhagwa) */
+    --jaap-primary-rgb: 255, 153, 51;
     --jaap-secondary: #FFB347;
     /* Pastel Orange */
     --jaap-accent: #FFD700;
@@ -41,6 +42,7 @@
     /* Deep Cyan/Teal */
     --jaap-primary: #00ACC1;
     /* Cyan 600 */
+    --jaap-primary-rgb: 0, 172, 193;
     --jaap-secondary: #4DD0E1;
     /* Cyan 300 */
     --jaap-accent: #00BCD4;
@@ -58,6 +60,7 @@
     /* Dark Green */
     --jaap-primary: #66BB6A;
     /* Green 400 */
+    --jaap-primary-rgb: 102, 187, 106;
     --jaap-secondary: #A5D6A7;
     /* Green 200 */
     --jaap-accent: #43A047;
@@ -75,6 +78,7 @@
     /* Soft Cream - Purity */
     --jaap-primary: #D4AF37;
     /* Gold - Prosperity & Divine */
+    --jaap-primary-rgb: 212, 175, 55;
     --jaap-secondary: #8B6F47;
     /* Bronze - Spiritual Warmth */
     --jaap-accent: #E8C547;
@@ -102,7 +106,7 @@ body {
 /* Custom Scrollbar Styles */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 153, 51, 0.3) transparent;
+  scrollbar-color: rgba(var(--jaap-primary-rgb), 0.3) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -116,17 +120,17 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 153, 51, 0.4);
+  background: rgba(var(--jaap-primary-rgb), 0.4);
   border-radius: 10px;
   transition: background-color 0.3s ease;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 153, 51, 0.6);
+  background: rgba(var(--jaap-primary-rgb), 0.6);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:active {
-  background: rgba(255, 153, 51, 0.8);
+  background: rgba(var(--jaap-primary-rgb), 0.8);
 }
 
 /* Hide scrollbar for scrollbar-none */
