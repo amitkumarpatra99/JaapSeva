@@ -65,7 +65,6 @@ export function useJaapCounter(
   };
 
   const handleIncrement = () => {
-    if (isLocked) return;
 
     const newCount = count + 1;
 

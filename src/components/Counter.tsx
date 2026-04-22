@@ -22,7 +22,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
 
 
   const handleIncrement = () => {
-    if (isLocked) return;
     onIncrement();
   };
 
@@ -30,7 +29,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
   const { contextSafe } = useGSAP({ scope: containerRef });
 
   const animatePress = contextSafe(() => {
-    if (isLocked) return;
     gsap.to(buttonRef.current, {
       scale: 0.95,
       duration: 0.1,
@@ -62,7 +60,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
 
   // --- Handlers ---
   const startContinuousIncrement = () => {
-    if (isLocked) return;
     setIsPressed(true);
     handleIncrement();
     animatePress(); // Trigger GSAP Press
@@ -112,7 +109,7 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
         />
 
         {/* 2. SVG Progress Ring (Absolute Full Fit) */}
-        <div className={`absolute inset-0 flex items-center justify-center pointer-events-none -rotate-90 transition-opacity duration-300 ${isLocked ? "opacity-30" : "opacity-100"}`}>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -rotate-90 transition-opacity duration-300 opacity-100">
           <svg className="w-full h-full max-w-[300px] max-h-[300px] overflow-visible" viewBox="0 0 300 300">
             {/* ViewBox ensures internal 300x300 coord system matches expected path */}
             {/* Background Track */}
@@ -149,8 +146,7 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
             "relative z-10 w-[min(55vw,224px)] h-[min(55vw,224px)] rounded-full flex flex-col items-center justify-center",
             "bg-white backdrop-blur-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-white/50", // Clean white paper look like screenshot
             "select-none cursor-pointer outline-none",
-            "touch-none active:scale-95 transition-transform", // Native press fallback + GSAP
-            isLocked && "cursor-not-allowed opacity-50 grayscale"
+            "touch-none active:scale-95 transition-transform" // Native press fallback + GSAP
           )}
           onPointerDown={startContinuousIncrement}
           onPointerUp={stopContinuousIncrement}
