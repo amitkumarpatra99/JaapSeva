@@ -12,11 +12,13 @@ interface HistoryModalProps {
     onClose: () => void;
     history: HistorySession[];
     onClearHistory: () => void;
+    onDeleteHistoryItem: (id: string) => void;
 }
 
-export default function HistoryModal({ isOpen, onClose, history, onClearHistory }: HistoryModalProps) {
+export default function HistoryModal({ isOpen, onClose, history, onClearHistory, onDeleteHistoryItem }: HistoryModalProps) {
     const [mounted, setMounted] = useState(false);
     const [showClearConfirm, setShowClearConfirm] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<string | null>(null);
 
     useEffect(() => {
         setMounted(true);
@@ -83,8 +85,16 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory 
                                         {session.count} <span className="text-xs text-foreground/70 font-normal">/ {session.target}</span>
                                     </p>
                                 </div>
-                                <div className="h-8 w-8 rounded-full bg-jaap-primary/10 flex items-center justify-center text-jaap-primary">
-                                    <div className="w-2 h-2 rounded-full bg-current" />
+                                <div className="flex items-center gap-2">
+                                    <div className="h-8 w-8 rounded-full bg-jaap-primary/10 flex items-center justify-center text-jaap-primary">
+                                        <div className="w-2 h-2 rounded-full bg-current" />
+                                    </div>
+                                    <button
+                                        onClick={() => setItemToDelete(session.id)}
+                                        className="h-8 w-8 rounded-full hover:bg-red-500/10 flex items-center justify-center text-red-500/70 hover:text-red-500 transition-colors"
+                                    >
+                                        <X size={16} />
+                                    </button>
                                 </div>
                             </div>
                         ))
@@ -110,6 +120,19 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory 
                 onConfirm={() => { onClearHistory(); setShowClearConfirm(false); }}
                 title="Clear History?"
                 message="All session history will be permanently deleted. This cannot be undone."
+            />
+
+            <ConfirmationModal
+                isOpen={!!itemToDelete}
+                onClose={() => setItemToDelete(null)}
+                onConfirm={() => {
+                    if (itemToDelete) {
+                        onDeleteHistoryItem(itemToDelete);
+                        setItemToDelete(null);
+                    }
+                }}
+                title="Delete Session?"
+                message="This session will be permanently deleted from your history."
             />
         </div>,
         document.body

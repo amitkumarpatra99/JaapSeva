@@ -102,6 +102,10 @@ export function useJaapCounter(
     setHistory([]);
   };
 
+  const deleteHistoryItem = (id: string) => {
+    setHistory((prev) => prev.filter((session) => session.id !== id));
+  };
+
   return {
     count,
     target,
@@ -116,5 +120,6 @@ export function useJaapCounter(
     handleUndo,
     confirmReset,
     clearHistory,
+    deleteHistoryItem,
   };
 }

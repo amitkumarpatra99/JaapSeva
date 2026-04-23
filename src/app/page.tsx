@@ -37,7 +37,8 @@ export default function Home() {
     handleIncrement,
     handleUndo,
     confirmReset,
-    clearHistory
+    clearHistory,
+    deleteHistoryItem
   } = useJaapCounter(soundEnabled, hapticEnabled, playClick, playMalaComplete, playReset, selectedMantra);
 
   // Refs for Animation
@@ -169,6 +170,7 @@ export default function Home() {
         onClose={() => setShowHistory(false)}
         history={history}
         onClearHistory={clearHistory}
+        onDeleteHistoryItem={deleteHistoryItem}
       />
     </main>
   );
