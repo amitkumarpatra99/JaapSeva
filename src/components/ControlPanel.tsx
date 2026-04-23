@@ -253,7 +253,7 @@ export default function ControlPanel({
         </div>
 
         {/* Bottom Row: Actions */}
-        <div className="flex items-center justify-between px-2 pb-1 pt-1 gap-2">
+        <div className="flex items-center justify-between px-1 py-2 gap-1">
 
           {/* Left Group */}
           <div className="flex flex-1 gap-2">

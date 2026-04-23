@@ -79,7 +79,7 @@ export default function Home() {
       {/* NEW Animated Spiritual Background */}
       <SpiritualBackground />
 
-      <div ref={contentRef} className="z-10 w-full max-w-md flex flex-col items-center gap-4 md:gap-12 py-4 md:py-8 opacity-0">
+      <div ref={contentRef} className="z-10 w-full max-w-md flex flex-col items-center gap-6 md:gap-10 py-2 md:py-4 opacity-0">
 
         <div className="text-center space-y-1 md:space-y-2 relative anim-item">
           {/* Header Glow */}

@@ -39,13 +39,13 @@ export default function WeeklyChart({ history }: WeeklyChartProps) {
   }, [history]);
 
   return (
-    <div className="w-full space-y-4 bg-white/40 p-6 rounded-[2rem] backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+    <div className="w-full space-y-3 bg-white/40 p-4 md:p-5 rounded-[2rem] backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
       <div className="flex items-center justify-between text-xs text-jaap-neutral px-1 border-b border-jaap-primary/5 pb-2">
         <span className="font-bold uppercase tracking-[0.2em]">Activity</span>
         <span className="font-medium opacity-70">Last 7 Days</span>
       </div>
 
-      <div className="flex items-end justify-between h-28 gap-3 px-1">
+      <div className="flex items-end justify-between h-24 md:h-28 gap-2 md:gap-3 px-1">
         {chartData.days.map((day) => {
           const heightPercent = Math.min((day.count / chartData.limit) * 100, 100);
 

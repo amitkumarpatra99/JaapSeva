@@ -94,7 +94,7 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
   const strokeDashoffset = circumference - progress * circumference;
 
   return (
-    <div ref={containerRef} className="relative flex flex-col items-center justify-center py-12">
+    <div ref={containerRef} className="relative flex flex-col items-center justify-center py-8 md:py-10">
 
       {/* Main Container - Sized to the Ring for Perfect Alignment */}
       <div className="relative flex items-center justify-center w-[min(70vw,300px)] h-[min(70vw,300px)]">
