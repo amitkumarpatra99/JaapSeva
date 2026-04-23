@@ -55,9 +55,9 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory,
                 </div>
 
                 {/* Scrollable List */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto pl-4 pr-1 py-4 space-y-3 custom-scrollbar">
                     {history.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full text-foreground/80 text-center p-8">
+                        <div className="flex flex-col items-center justify-center h-full text-foreground/80 text-center p-8 mr-3">
                             <Calendar size={48} className="mb-4 opacity-80" />
                             <p className="text-sm">No sessions recorded yet.</p>
                             <p className="text-xs mt-1">Complete a target to save session!</p>
