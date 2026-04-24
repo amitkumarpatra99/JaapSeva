@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -22,13 +22,16 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
 
 
   const handleIncrement = () => {
+    if (isLocked) return;
     onIncrement();
   };
 
   // --- GSAP Animations ---
   const { contextSafe } = useGSAP({ scope: containerRef });
 
-  const animatePress = contextSafe(() => {
+  const animatePress = contextSafe(useCallback(() => {
+    if (!buttonRef.current || !rippleRef.current) return;
+    
     gsap.to(buttonRef.current, {
       scale: 0.95,
       duration: 0.1,
@@ -41,9 +44,11 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
       duration: 0.3,
       ease: "power2.out"
     });
-  });
+  }, []));
 
-  const animateRelease = contextSafe(() => {
+  const animateRelease = contextSafe(useCallback(() => {
+    if (!buttonRef.current || !rippleRef.current) return;
+
     gsap.to(buttonRef.current, {
       scale: 1,
       duration: 0.5,
@@ -56,10 +61,11 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
       duration: 0.3,
       ease: "power2.in"
     });
-  });
+  }, []));
 
   // --- Handlers ---
   const startContinuousIncrement = () => {
+    if (isLocked) return;
     setIsPressed(true);
     handleIncrement();
     animatePress(); // Trigger GSAP Press
@@ -67,7 +73,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
     intervalRef.current = setTimeout(() => {
       intervalRef.current = setInterval(() => {
         handleIncrement();
-        // Maybe pulse effect here if desired, but keep simple for now
       }, 120);
     }, 400);
   };
@@ -83,8 +88,14 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
     }
   };
 
+  // Safe unmount handling
   useEffect(() => {
-    return () => stopContinuousIncrement();
+    return () => {
+      if (intervalRef.current) {
+        clearTimeout(intervalRef.current);
+        clearInterval(intervalRef.current);
+      }
+    };
   }, []);
 
   // --- Math ---
@@ -141,8 +152,8 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
             {Array.from({ length: MALA_BEADS }).map((_, i) => {
               // Start from bottom (Math.PI / 2) and go clockwise
               const angle = (Math.PI / 2) + (i / MALA_BEADS) * 2 * Math.PI;
-              const cx = 150 + radius * Math.cos(angle);
-              const cy = 150 + radius * Math.sin(angle);
+              const cx = +(150 + radius * Math.cos(angle)).toFixed(4);
+              const cy = +(150 + radius * Math.sin(angle)).toFixed(4);
               
               const isActive = i < currentCycleCount;
               const isLatestActive = count > 0 && i === currentCycleCount - 1;
