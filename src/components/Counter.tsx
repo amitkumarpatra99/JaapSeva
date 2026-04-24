@@ -88,10 +88,9 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
   }, []);
 
   // --- Math ---
-  const progress = Math.min(count / target, 1);
   const radius = 120; // Internal SVG radius (keeps stroke clean)
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - progress * circumference;
+  const MALA_BEADS = 108;
+  const currentCycleCount = count === 0 ? 0 : ((count - 1) % MALA_BEADS) + 1;
 
   return (
     <div ref={containerRef} className="relative flex flex-col items-center justify-center py-8 md:py-10">
@@ -108,34 +107,48 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
           )}
         />
 
-        {/* 2. SVG Progress Ring (Absolute Full Fit) */}
+        {/* 2. SVG Progress Ring (Absolute Full Fit) - The Mala */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none -rotate-90 transition-opacity duration-300 opacity-100">
           <svg className="w-full h-full max-w-[300px] max-h-[300px] overflow-visible" viewBox="0 0 300 300">
             {/* ViewBox ensures internal 300x300 coord system matches expected path */}
-            {/* Background Track */}
+            
+            {/* Background thin track to string the beads together */}
             <circle
               cx="150"
               cy="150"
               r={radius}
               stroke="currentColor"
-              strokeWidth="4"
+              strokeWidth="0.5"
               fill="none"
-              className="text-jaap-neutral/10"
+              className="text-jaap-neutral/20"
             />
 
-            {/* Active Progress Indicator */}
-            <circle
-              cx="150"
-              cy="150"
-              r={radius}
-              stroke="currentColor"
-              strokeWidth="8"
-              fill="none"
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              className="text-jaap-primary transition-all duration-100 ease-linear drop-shadow-md"
-            />
+            {/* The 108 Beads */}
+            {Array.from({ length: MALA_BEADS }).map((_, i) => {
+              const angle = (i / MALA_BEADS) * 2 * Math.PI;
+              const cx = 150 + radius * Math.cos(angle);
+              const cy = 150 + radius * Math.sin(angle);
+              
+              const isActive = i < currentCycleCount;
+              const isTarget = target <= MALA_BEADS && (i + 1) === target;
+              const isGuru = i === 0;
+
+              return (
+                <circle
+                  key={i}
+                  cx={cx}
+                  cy={cy}
+                  r={isGuru ? 5 : isTarget ? 4.5 : 3.5}
+                  fill="currentColor"
+                  className={cn(
+                    "transition-all duration-300",
+                    isActive ? "text-jaap-primary drop-shadow-[0_0_5px_rgba(var(--jaap-primary-rgb),0.8)]" : "text-jaap-neutral/20",
+                    isTarget && !isActive && "text-jaap-primary/50 animate-pulse",
+                    isGuru && !isActive && "text-jaap-primary/40" // Make guru bead always slightly visible
+                  )}
+                />
+              );
+            })}
           </svg>
         </div>
 
