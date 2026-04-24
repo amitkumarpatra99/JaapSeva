@@ -108,45 +108,63 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
         />
 
         {/* 2. SVG Progress Ring (Absolute Full Fit) - The Mala */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -rotate-90 transition-opacity duration-300 opacity-100">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100">
           <svg className="w-full h-full max-w-[300px] max-h-[300px] overflow-visible" viewBox="0 0 300 300">
             {/* ViewBox ensures internal 300x300 coord system matches expected path */}
             
-            {/* Background thin track to string the beads together */}
+            <defs>
+              <radialGradient id="bead-highlight" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stopColor="white" stopOpacity="0.8" />
+                <stop offset="40%" stopColor="white" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="black" stopOpacity="0.2" />
+              </radialGradient>
+            </defs>
+
+            {/* Background thin string to connect the beads */}
             <circle
               cx="150"
               cy="150"
               r={radius}
               stroke="currentColor"
-              strokeWidth="0.5"
+              strokeWidth="0.75"
               fill="none"
               className="text-jaap-neutral/20"
             />
 
+            {/* Tassel at the bottom (Guru Bead anchor) */}
+            <g className={cn("transition-colors duration-700", count > 0 ? "text-jaap-primary" : "text-jaap-neutral/40")}>
+               <circle cx="150" cy="278" r="2.5" fill="currentColor" />
+               <path d="M 148 280 L 142 298 M 150 280 L 150 300 M 152 280 L 158 298" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="opacity-80" />
+            </g>
+
             {/* The 108 Beads */}
             {Array.from({ length: MALA_BEADS }).map((_, i) => {
-              const angle = (i / MALA_BEADS) * 2 * Math.PI;
+              // Start from bottom (Math.PI / 2) and go clockwise
+              const angle = (Math.PI / 2) + (i / MALA_BEADS) * 2 * Math.PI;
               const cx = 150 + radius * Math.cos(angle);
               const cy = 150 + radius * Math.sin(angle);
               
               const isActive = i < currentCycleCount;
+              const isLatestActive = count > 0 && i === currentCycleCount - 1;
               const isTarget = target <= MALA_BEADS && (i + 1) === target;
               const isGuru = i === 0;
 
+              const r = isGuru ? 5.5 : isLatestActive ? 5 : isTarget ? 4.5 : 3.5;
+
               return (
-                <circle
+                <g
                   key={i}
-                  cx={cx}
-                  cy={cy}
-                  r={isGuru ? 5 : isTarget ? 4.5 : 3.5}
-                  fill="currentColor"
                   className={cn(
-                    "transition-all duration-300",
-                    isActive ? "text-jaap-primary drop-shadow-[0_0_5px_rgba(var(--jaap-primary-rgb),0.8)]" : "text-jaap-neutral/20",
-                    isTarget && !isActive && "text-jaap-primary/50 animate-pulse",
-                    isGuru && !isActive && "text-jaap-primary/40" // Make guru bead always slightly visible
+                    "transition-all duration-500 ease-out",
+                    isActive ? "text-jaap-primary drop-shadow-[0_0_5px_rgba(var(--jaap-primary-rgb),0.8)]" : "text-jaap-neutral/30",
+                    isTarget && !isActive && "text-jaap-primary/40 animate-pulse",
+                    isLatestActive && "drop-shadow-[0_0_12px_rgba(var(--jaap-primary-rgb),1)] scale-125"
                   )}
-                />
+                  style={{ transformOrigin: `${cx}px ${cy}px` }}
+                >
+                  <circle cx={cx} cy={cy} r={r} fill="currentColor" />
+                  <circle cx={cx} cy={cy} r={r} fill="url(#bead-highlight)" />
+                </g>
               );
             })}
           </svg>
