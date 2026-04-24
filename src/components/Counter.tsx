@@ -22,7 +22,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
 
 
   const handleIncrement = () => {
-    if (isLocked) return;
     onIncrement();
   };
 
@@ -65,7 +64,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
 
   // --- Handlers ---
   const startContinuousIncrement = () => {
-    if (isLocked) return;
     setIsPressed(true);
     handleIncrement();
     animatePress(); // Trigger GSAP Press
