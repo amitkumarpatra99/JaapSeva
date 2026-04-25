@@ -137,19 +137,24 @@ export default function Home() {
         </div>
 
         {/* Footer - JaapSeva by MR PATRA */}
-        <div className="anim-item mt-4 flex flex-row items-center gap-2 text-[10px] font-mono tracking-widest uppercase text-jaap-neutral/60">
+           <div className="anim-item mt-4 mb-2 flex flex-row items-center gap-2.5 text-[10px] md:text-xs font-mono tracking-widest uppercase bg-background/80 backdrop-blur-md border border-jaap-primary/20 shadow-[0_0_15px_rgba(var(--jaap-primary-rgb),0.15)] px-6 py-3 rounded-full relative overflow-hidden group">
+          {/* Subtle hover effect for the pill */}
+          <div className="absolute inset-0 bg-jaap-primary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+          
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="hover:text-jaap-primary transition-colors hover:underline underline-offset-4 cursor-pointer"
+            className="text-foreground/70 hover:text-jaap-primary transition-colors cursor-pointer relative z-10 font-bold"
           >
             JaapSeva
           </button>
-          <span className="opacity-40 text-[8px]">by</span>
+          
+          <span className="opacity-30 text-[8px] relative z-10">by</span>
+          
           <a
             href="https://mrpatra.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-jaap-primary transition-colors hover:underline underline-offset-4 font-bold cursor-pointer"
+            className="text-jaap-primary font-extrabold hover:text-jaap-accent transition-colors relative z-10 drop-shadow-sm"
           >
             MR PATRA
           </a>
