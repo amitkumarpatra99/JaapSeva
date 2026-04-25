@@ -200,6 +200,7 @@ export default function ControlPanel({
               >
                 <History size={18} />
               </button>
+              <ThemeSwitcher disabled={isLocked} />
             </div>
 
             <div className="flex gap-2.5">
@@ -251,11 +252,6 @@ export default function ControlPanel({
           </button>
         </div>
 
-      </div>
-
-      {/* Theme Switcher */}
-      <div className={cn("mt-6 transition-opacity", isLocked && "opacity-50 pointer-events-none")}>
-        <ThemeSwitcher />
       </div>
 
       {/* Add Mantra Modal */}
