@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef } from "react";
-import { Palette, Sun, Sparkles, Droplets, Leaf } from "lucide-react";
+import { Palette, Sun, Sparkles, Droplets, Leaf, Flower2, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const THEMES = [
@@ -10,6 +10,8 @@ const THEMES = [
   { id: "ocean", name: "Ocean", icon: Droplets },
   { id: "forest", name: "Forest", icon: Leaf },
   { id: "dark", name: "Temple", icon: Sparkles },
+  { id: "lotus", name: "Lotus", icon: Flower2 },
+  { id: "twilight", name: "Twilight", icon: Moon },
 ];
 
 export function ThemeSwitcher({ disabled }: { disabled?: boolean }) {

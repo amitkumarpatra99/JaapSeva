@@ -88,6 +88,42 @@
     --jaap-bg-pattern: #3D2B2B;
     /* Deep Burgundy Pattern */
   }
+
+  .lotus {
+    --background: #FFF1F2;
+    /* Light Rose */
+    --foreground: #881337;
+    /* Deep Rose */
+    --jaap-primary: #E11D48;
+    /* Rose 600 */
+    --jaap-primary-rgb: 225, 29, 72;
+    --jaap-secondary: #FDA4AF;
+    /* Rose 300 */
+    --jaap-accent: #BE123C;
+    /* Rose 700 */
+    --jaap-neutral: #9F1239;
+    /* Rose 800 */
+    --jaap-bg-pattern: #FFE4E6;
+    /* Rose Pattern */
+  }
+
+  .twilight {
+    --background: #1E1B4B;
+    /* Deep Indigo Night */
+    --foreground: #E0E7FF;
+    /* Soft Indigo Glow */
+    --jaap-primary: #818CF8;
+    /* Indigo 400 */
+    --jaap-primary-rgb: 129, 140, 248;
+    --jaap-secondary: #4F46E5;
+    /* Indigo 600 */
+    --jaap-accent: #A5B4FC;
+    /* Bright Indigo Glow */
+    --jaap-neutral: #3730A3;
+    /* Indigo 800 */
+    --jaap-bg-pattern: #312E81;
+    /* Dark Indigo Pattern */
+  }
 }
 
 :root {

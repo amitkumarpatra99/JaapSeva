@@ -33,7 +33,7 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="saffron"
-          themes={["saffron", "ocean", "forest", "dark"]}
+          themes={["saffron", "ocean", "forest", "dark", "lotus", "twilight"]}
           enableSystem={false}
           disableTransitionOnChange
         >
