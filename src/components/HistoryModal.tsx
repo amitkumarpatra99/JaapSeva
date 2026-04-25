@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Calendar, Clock, RotateCcw } from "lucide-react";
+import { X, Calendar, Clock, RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -22,7 +22,6 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory,
 
     useEffect(() => {
         setMounted(true);
-        // Prevent scrolling when modal is open
         if (isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -36,64 +35,65 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory,
     if (!mounted || !isOpen) return null;
 
     return createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
-            {/* Modal Content - Matches Glass Theme */}
-            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2rem] shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] w-full max-w-md h-[80vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/40 backdrop-blur-sm animate-in fade-in duration-300">
+            {/* Blurry, Highly Rounded Modal Content */}
+            <div className="bg-background/60 backdrop-blur-xl border border-foreground/10 rounded-[2.5rem] shadow-2xl w-full max-w-md h-[80vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
 
                 {/* Header */}
-                <div className="p-6 border-b border-jaap-primary/20 flex items-center justify-between">
-                    <h3 className="text-xl font-bold text-foreground tracking-wide drop-shadow-sm flex items-center gap-2">
-                        <Clock size={20} />
+                <div className="p-6 border-b border-foreground/10 flex items-center justify-between bg-foreground/[0.02]">
+                    <h3 className="text-lg font-medium text-foreground flex items-center gap-2">
+                        <Clock size={20} className="text-foreground/60" />
                         History
                     </h3>
                     <button
                         onClick={onClose}
-                        className="text-foreground hover:text-foreground/80 transition-colors p-1 hover:bg-jaap-primary/20 rounded-full"
+                        className="text-foreground/50 hover:text-foreground transition-colors p-2 hover:bg-foreground/10 rounded-full"
+                        aria-label="Close"
                     >
                         <X size={20} />
                     </button>
                 </div>
 
                 {/* Scrollable List */}
-                <div className="flex-1 overflow-y-auto pl-4 pr-1 py-4 space-y-3 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto pl-5 pr-2 py-5 space-y-3 custom-scrollbar">
                     {history.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full text-foreground/80 text-center p-8 mr-3">
-                            <Calendar size={48} className="mb-4 opacity-80" />
-                            <p className="text-sm">No sessions recorded yet.</p>
-                            <p className="text-xs mt-1">Complete a target to save session!</p>
+                        <div className="flex flex-col items-center justify-center h-full text-foreground/50 text-center p-8 mr-3">
+                            <Calendar size={48} className="mb-4 opacity-40" />
+                            <p className="text-sm font-medium">No sessions recorded yet.</p>
+                            <p className="text-xs mt-2 opacity-70">Complete a target to save a session.</p>
                         </div>
                     ) : (
                         history.slice().reverse().map((session) => (
                             <div
                                 key={session.id}
-                                className="bg-jaap-primary/5 border border-jaap-primary/20 rounded-xl p-4 flex items-center justify-between transition-all hover:bg-jaap-primary/10"
+                                className="bg-foreground/[0.03] hover:bg-foreground/[0.06] border border-foreground/5 rounded-[1.5rem] p-5 flex items-center justify-between transition-colors backdrop-blur-sm"
                             >
                                 <div>
                                     {/* Mantra badge */}
                                     {session.mantraName && (
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/90 mb-1 flex items-center gap-1">
-                                            <span>{session.mantraSymbol}</span>
+                                        <p className="text-[10px] font-semibold uppercase tracking-widest text-foreground/60 mb-1.5 flex items-center gap-2">
+                                            <span className="text-base leading-none">{session.mantraSymbol}</span>
                                             <span>{session.mantraName}</span>
                                         </p>
                                     )}
-                                    <p className="text-xs font-bold text-foreground/90 uppercase tracking-wider mb-1">
+                                    <p className="text-xs text-foreground/50 uppercase tracking-wider mb-2">
                                         {new Date(session.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                                        <span className="mx-1">•</span>
+                                        <span className="mx-2 opacity-50">•</span>
                                         {new Date(session.date).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
                                     </p>
-                                    <p className="text-lg font-bold text-foreground">
-                                        {session.count} <span className="text-xs text-foreground/90 font-medium">/ {session.target}</span>
+                                    <p className="text-2xl font-light text-foreground tracking-tight">
+                                        {session.count} <span className="text-sm text-foreground/40 font-normal tracking-widest ml-1">/ {session.target}</span>
                                     </p>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="h-8 w-8 rounded-full bg-jaap-primary/20 flex items-center justify-center text-foreground">
-                                        <div className="w-2 h-2 rounded-full bg-current" />
-                                    </div>
+                                
+                                <div className="flex items-center gap-3">
+                                    <div className="h-2.5 w-2.5 rounded-full bg-jaap-primary/50 mr-1" />
                                     <button
                                         onClick={() => setItemToDelete(session.id)}
-                                        className="h-8 w-8 rounded-full hover:bg-red-500/20 flex items-center justify-center text-red-500 hover:text-red-600 transition-colors"
+                                        className="h-10 w-10 rounded-full hover:bg-red-500/10 flex items-center justify-center text-foreground/30 hover:text-red-500 transition-colors"
+                                        title="Delete Session"
                                     >
-                                        <X size={16} />
+                                        <Trash2 size={18} />
                                     </button>
                                 </div>
                             </div>
@@ -102,13 +102,13 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory,
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-jaap-primary/20 bg-jaap-primary/5">
+                <div className="p-5 border-t border-foreground/10 bg-foreground/[0.02]">
                     <button
                         onClick={() => setShowClearConfirm(true)}
                         disabled={history.length === 0}
-                        className="w-full py-3 rounded-xl flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground/80 hover:text-foreground hover:bg-jaap-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-4 rounded-full flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground/50 hover:text-foreground hover:bg-foreground/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        <RotateCcw size={14} /> Clear History
+                        <RotateCcw size={16} /> Clear History
                     </button>
                 </div>
 
