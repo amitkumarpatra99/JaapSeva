@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
-import { Flame, Disc, BarChart3, Info, X, Calendar, Trophy } from "lucide-react";
+import { Flame, Disc, BarChart3, Info, X, CalendarDays, Crown } from "lucide-react";
 
 interface StatsDisplayProps {
   target: number;
@@ -50,8 +50,8 @@ export default function StatsDisplay({
         onClick={() => setIsStreakModalOpen(true)}
         className={cn(cardClass, "flex flex-col items-center justify-center p-4 transition-transform hover:scale-[1.02] active:scale-95 duration-300 gap-1.5")}
       >
-        <button className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-foreground/40 hover:text-jaap-primary">
-          <Info size={12} />
+        <button className="absolute top-2.5 right-2.5 text-foreground/30 group-hover:text-jaap-primary transition-colors duration-300">
+          <Info size={14} />
         </button>
         <span className="text-2xl font-bold text-jaap-primary flex items-center gap-1.5 leading-none">
           {streak} <Flame size={18} className="text-jaap-primary fill-jaap-primary/20" />
@@ -107,15 +107,16 @@ export default function StatsDisplay({
                   <span className="text-3xl font-black text-jaap-primary leading-none">{streak} <span className="text-sm font-bold text-foreground/50">days</span></span>
                 </div>
                 {streak > 0 && (
-                  <div className="text-[10px] text-foreground/50 mt-2 flex items-center gap-1 font-medium bg-background/50 py-1 px-2 rounded-lg w-fit">
-                    <Calendar size={10} /> {formatDate(streakStartDate)} - {formatDate(lastActiveDate)}
+                  <div className="text-[10px] text-foreground/50 mt-2 flex items-center gap-1.5 font-medium bg-background/50 py-1.5 px-2.5 rounded-lg w-fit border border-foreground/5">
+                    <CalendarDays size={12} className="text-foreground/40" /> 
+                    <span>{formatDate(streakStartDate)} <span className="text-foreground/30 mx-0.5">→</span> {formatDate(lastActiveDate)}</span>
                   </div>
                 )}
               </div>
 
               <div className="bg-foreground/5 rounded-2xl p-4 flex flex-col gap-1 border border-foreground/5">
                 <span className="text-xs uppercase tracking-wider text-foreground/50 font-bold flex items-center gap-1.5">
-                  <Trophy size={14} className="text-jaap-accent" /> Highest Streak
+                  <Crown size={14} className="text-jaap-accent" /> Highest Streak
                 </span>
                 <div className="flex justify-between items-end mt-1">
                   <span className="text-3xl font-black text-jaap-accent leading-none">{Math.max(streak, bestStreak)} <span className="text-sm font-bold text-foreground/50">days</span></span>
