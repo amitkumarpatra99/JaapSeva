@@ -19,6 +19,9 @@ export function useJaapCounter(
   const [count, setCount] = useState(0);
   const [target, setTarget] = useState(DEFAULTS.TARGET);
   const [streak, setStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
+  const [streakStartDate, setStreakStartDate] = useState<string | null>(null);
+  const [lastActiveDate, setLastActiveDate] = useState<string | null>(null);
   const [malasCompleted, setMalasCompleted] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [history, setHistory] = useState<HistorySession[]>([]);
@@ -29,16 +32,42 @@ export function useJaapCounter(
     const savedCount = localStorage.getItem(STORAGE_KEYS.COUNT);
     const savedTarget = localStorage.getItem(STORAGE_KEYS.TARGET);
     const savedStreak = localStorage.getItem(STORAGE_KEYS.STREAK);
+    const savedBestStreak = localStorage.getItem(STORAGE_KEYS.BEST_STREAK);
+    const savedStreakStartDate = localStorage.getItem(STORAGE_KEYS.STREAK_START_DATE);
+    const savedLastActiveDate = localStorage.getItem(STORAGE_KEYS.LAST_ACTIVE_DATE);
     const savedMalas = localStorage.getItem(STORAGE_KEYS.MALAS);
     const savedTotal = localStorage.getItem(STORAGE_KEYS.TOTAL);
     const savedHistory = localStorage.getItem(STORAGE_KEYS.HISTORY);
 
     if (savedCount) setCount(parseInt(savedCount));
     if (savedTarget) setTarget(parseInt(savedTarget));
-    if (savedStreak) setStreak(parseInt(savedStreak));
     if (savedMalas) setMalasCompleted(parseInt(savedMalas));
     if (savedTotal) setTotalCount(parseInt(savedTotal));
     if (savedHistory) setHistory(JSON.parse(savedHistory));
+    
+    if (savedBestStreak) setBestStreak(parseInt(savedBestStreak));
+    if (savedStreakStartDate) setStreakStartDate(savedStreakStartDate);
+    if (savedLastActiveDate) setLastActiveDate(savedLastActiveDate);
+
+    if (savedStreak) {
+      const parsedStreak = parseInt(savedStreak);
+      if (savedLastActiveDate) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const lastActive = new Date(savedLastActiveDate);
+        lastActive.setHours(0, 0, 0, 0);
+        const diffDays = Math.round((today.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays > 1) {
+          setStreak(0);
+          setStreakStartDate(null);
+        } else {
+          setStreak(parsedStreak);
+        }
+      } else {
+        setStreak(parsedStreak);
+      }
+    }
   }, []);
 
   // Save Effect
@@ -46,10 +75,15 @@ export function useJaapCounter(
     localStorage.setItem(STORAGE_KEYS.COUNT, count.toString());
     localStorage.setItem(STORAGE_KEYS.TARGET, target.toString());
     localStorage.setItem(STORAGE_KEYS.STREAK, streak.toString());
+    localStorage.setItem(STORAGE_KEYS.BEST_STREAK, bestStreak.toString());
+    if (streakStartDate) localStorage.setItem(STORAGE_KEYS.STREAK_START_DATE, streakStartDate);
+    else localStorage.removeItem(STORAGE_KEYS.STREAK_START_DATE);
+    if (lastActiveDate) localStorage.setItem(STORAGE_KEYS.LAST_ACTIVE_DATE, lastActiveDate);
+    else localStorage.removeItem(STORAGE_KEYS.LAST_ACTIVE_DATE);
     localStorage.setItem(STORAGE_KEYS.MALAS, malasCompleted.toString());
     localStorage.setItem(STORAGE_KEYS.TOTAL, totalCount.toString());
     localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(history));
-  }, [count, target, streak, malasCompleted, totalCount, history]);
+  }, [count, target, streak, bestStreak, streakStartDate, lastActiveDate, malasCompleted, totalCount, history]);
 
   const saveSession = () => {
     const newSession: HistorySession = {
@@ -79,7 +113,36 @@ export function useJaapCounter(
 
     if (newCount === target) {
       setMalasCompleted((prev) => prev + 1);
-      setStreak((prev) => prev + 1);
+      
+      const todayStr = new Date().toISOString();
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
+      
+      let currentStreak = streak;
+      
+      if (!lastActiveDate) {
+        currentStreak = 1;
+        setStreakStartDate(todayStr);
+      } else {
+        const lastDate = new Date(lastActiveDate);
+        lastDate.setHours(0, 0, 0, 0);
+        const diffDays = Math.round((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) {
+          currentStreak += 1;
+        } else if (diffDays === 0) {
+          currentStreak = Math.max(1, currentStreak);
+          if (!streakStartDate) setStreakStartDate(todayStr);
+        } else {
+          currentStreak = 1;
+          setStreakStartDate(todayStr);
+        }
+      }
+      
+      setStreak(currentStreak);
+      setBestStreak(prev => Math.max(prev, currentStreak));
+      setLastActiveDate(todayStr);
+
       saveSession();
       setCount(0);
     }
@@ -111,6 +174,9 @@ export function useJaapCounter(
     target,
     setTarget,
     streak,
+    bestStreak,
+    streakStartDate,
+    lastActiveDate,
     malasCompleted,
     totalCount,
     history,

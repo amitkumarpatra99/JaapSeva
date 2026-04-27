@@ -7,6 +7,9 @@ export const STORAGE_KEYS = {
   HISTORY: "jaap_history",
   SOUND: "jaap_sound",
   HAPTIC: "jaap_haptic",
+  LAST_ACTIVE_DATE: "jaap_last_active_date",
+  STREAK_START_DATE: "jaap_streak_start_date",
+  BEST_STREAK: "jaap_best_streak",
 };
 
 export const DEFAULTS = {

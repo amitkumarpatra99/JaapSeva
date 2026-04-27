@@ -29,6 +29,9 @@ export default function Home() {
     target,
     setTarget,
     streak,
+    bestStreak,
+    streakStartDate,
+    lastActiveDate,
     malasCompleted,
     totalCount,
     history,
@@ -103,6 +106,9 @@ export default function Home() {
             target={target}
             currentCount={count}
             streak={streak}
+            bestStreak={bestStreak}
+            streakStartDate={streakStartDate}
+            lastActiveDate={lastActiveDate}
             malasCompleted={malasCompleted}
             totalCount={totalCount}
           />
