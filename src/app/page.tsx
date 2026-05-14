@@ -82,9 +82,9 @@ export default function Home() {
       {/* NEW Animated Spiritual Background */}
       <SpiritualBackground />
 
-      <div ref={contentRef} className="z-10 w-full max-w-md flex flex-col items-center gap-6 md:gap-10 py-2 md:py-4 opacity-0">
+      <div ref={contentRef} className="z-10 w-full max-w-6xl flex flex-col items-center gap-6 md:gap-10 py-2 md:py-4 opacity-0">
 
-        <div className="text-center space-y-1 md:space-y-2 relative anim-item">
+        <div className="text-center space-y-1 md:space-y-2 relative anim-item px-2 sm:px-0">
           {/* Header Glow */}
           <div className="absolute -inset-x-10 -inset-y-10 bg-white/40 blur-3xl rounded-full z-0 pointer-events-none" />
           <h1 className="text-4xl md:text-6xl font-serif font-bold tracking-tight text-jaap-primary relative z-10 drop-shadow-sm py-2">
@@ -101,49 +101,52 @@ export default function Home() {
           </p>
         </div>
 
-        <div className={`anim-item ${isLocked ? "opacity-30 pointer-events-none transition-opacity duration-300" : "transition-opacity duration-300"}`}>
-          <StatsDisplay
-            target={target}
-            currentCount={count}
-            streak={streak}
-            bestStreak={bestStreak}
-            streakStartDate={streakStartDate}
-            lastActiveDate={lastActiveDate}
-            malasCompleted={malasCompleted}
-            totalCount={totalCount}
-          />
-        </div>
+        <div className="w-full grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(340px,420px)]">
+          <div className="flex flex-col gap-6">
+            <div className={`anim-item ${isLocked ? "opacity-30 pointer-events-none transition-opacity duration-300" : "transition-opacity duration-300"}`}>
+              <StatsDisplay
+                target={target}
+                currentCount={count}
+                streak={streak}
+                bestStreak={bestStreak}
+                streakStartDate={streakStartDate}
+                lastActiveDate={lastActiveDate}
+                malasCompleted={malasCompleted}
+                totalCount={totalCount}
+              />
+            </div>
 
-        <div className="anim-item">
-          <Counter
-            count={count}
-            target={target}
-            onIncrement={handleIncrement}
-            isLocked={isLocked}
-          />
-        </div>
+            <div className="anim-item">
+              <Counter
+                count={count}
+                target={target}
+                onIncrement={handleIncrement}
+                isLocked={isLocked}
+              />
+            </div>
+          </div>
 
-        {/* Controls */}
-        <div className="anim-item w-full flex justify-center">
-          <ControlPanel
-            selectedTarget={target}
-            onTargetSelect={(t) => { if (!isLocked) setTarget(t); }}
-            selectedMantra={selectedMantra}
-            onMantraSelect={(m) => setSelectedMantra(m)}
-            onResetRequest={handleResetRequest}
-            onUndo={handleUndo}
-            onLockToggle={() => setIsLocked(!isLocked)}
-            onShowHistory={() => setShowHistory(true)}
-            isLocked={isLocked}
-            soundEnabled={soundEnabled}
-            onToggleSound={() => setSoundEnabled(!soundEnabled)}
-            hapticEnabled={hapticEnabled}
-            onToggleHaptic={() => setHapticEnabled(!hapticEnabled)}
-          />
+          <div className="anim-item w-full flex justify-center">
+            <ControlPanel
+              selectedTarget={target}
+              onTargetSelect={(t) => { if (!isLocked) setTarget(t); }}
+              selectedMantra={selectedMantra}
+              onMantraSelect={(m) => setSelectedMantra(m)}
+              onResetRequest={handleResetRequest}
+              onUndo={handleUndo}
+              onLockToggle={() => setIsLocked(!isLocked)}
+              onShowHistory={() => setShowHistory(true)}
+              isLocked={isLocked}
+              soundEnabled={soundEnabled}
+              onToggleSound={() => setSoundEnabled(!soundEnabled)}
+              hapticEnabled={hapticEnabled}
+              onToggleHaptic={() => setHapticEnabled(!hapticEnabled)}
+            />
+          </div>
         </div>
 
         {/* Footer - JaapSeva by MR PATRA */}
-           <div className="anim-item mt-4 mb-2 flex flex-row items-center gap-2.5 text-[10px] md:text-xs font-mono tracking-widest uppercase bg-background/80 backdrop-blur-md border border-jaap-primary/20 shadow-[0_0_15px_rgba(var(--jaap-primary-rgb),0.15)] px-6 py-3 rounded-full relative overflow-hidden group">
+        <div className="anim-item mt-4 mb-2 flex flex-row items-center gap-2.5 text-[10px] md:text-xs font-mono tracking-widest uppercase bg-background/80 backdrop-blur-md border border-jaap-primary/20 shadow-[0_0_15px_rgba(var(--jaap-primary-rgb),0.15)] px-6 py-3 rounded-full relative overflow-hidden group">
           {/* Subtle hover effect for the pill */}
           <div className="absolute inset-0 bg-jaap-primary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
           
@@ -165,7 +168,6 @@ export default function Home() {
             MR PATRA
           </a>
         </div>
-
       </div>
 
       <ConfirmationModal

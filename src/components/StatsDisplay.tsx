@@ -163,7 +163,7 @@ export default function StatsDisplay({
   return (
     <>
       {/* Stats Grid */}
-      <div className="grid grid-cols-3 gap-3 w-full max-w-sm text-center">
+      <div className="grid grid-cols-1 gap-3 w-full sm:grid-cols-2 lg:grid-cols-3 text-center">
 
         {/* Streak */}
         <div className="relative group">
