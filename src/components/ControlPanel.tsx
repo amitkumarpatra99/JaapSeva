@@ -87,7 +87,7 @@ export default function ControlPanel({
   const allMantras = [...MANTRAS, ...customMantras];
 
   return (
-    <div className="w-full max-w-full sm:max-w-md flex flex-col items-center animate-in slide-in-from-bottom-8 duration-700 delay-200">
+    <div className="w-full max-w-sm flex flex-col items-center animate-in slide-in-from-bottom-8 duration-700 delay-200">
       
       {/* Soft Rounded Solid Card Container */}
       <div className="w-full bg-background border border-foreground/10 shadow-lg rounded-[2rem] p-6 flex flex-col gap-6">
