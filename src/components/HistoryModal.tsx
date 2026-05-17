@@ -19,6 +19,7 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory,
     const [mounted, setMounted] = useState(false);
     const [showClearConfirm, setShowClearConfirm] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+    const [exporting, setExporting] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -33,6 +34,38 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory,
     }, [isOpen]);
 
     if (!mounted || !isOpen) return null;
+
+    const handleExportHistory = () => {
+        if (!history.length) return;
+
+        const rows = [
+            ["Date", "Time", "Mantra", "Count", "Target"],
+            ...history.slice().reverse().map((session) => {
+                const date = new Date(session.date);
+                const dateString = date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+                const timeString = date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+                const mantra = session.mantraName ? `${session.mantraSymbol} ${session.mantraName}` : "—";
+                return [dateString, timeString, mantra, session.count.toString(), session.target.toString()];
+            }),
+        ];
+
+        const csvContent = rows
+            .map((row) => row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(","))
+            .join("\r\n");
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `jaapseva-history-${new Date().toISOString().split("T")[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+
+        setExporting(true);
+        window.setTimeout(() => setExporting(false), 1800);
+    };
 
     return createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/40 backdrop-blur-sm animate-in fade-in duration-300">
@@ -102,7 +135,14 @@ export default function HistoryModal({ isOpen, onClose, history, onClearHistory,
                 </div>
 
                 {/* Footer */}
-                <div className="p-5 border-t border-foreground/10 bg-foreground/[0.02]">
+                <div className="p-5 border-t border-foreground/10 bg-foreground/[0.02] space-y-3">
+                    <button
+                        onClick={handleExportHistory}
+                        disabled={history.length === 0}
+                        className="w-full py-4 rounded-full flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground/50 hover:text-foreground hover:bg-foreground/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <span>{exporting ? "Exported" : "Export CSV"}</span>
+                    </button>
                     <button
                         onClick={() => setShowClearConfirm(true)}
                         disabled={history.length === 0}

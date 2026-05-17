@@ -65,10 +65,24 @@ export default function ControlPanel({
 }: ControlPanelProps) {
   const [customMantras, setCustomMantras] = useState<Mantra[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [customTarget, setCustomTarget] = useState(selectedTarget.toString());
 
   useEffect(() => {
     setCustomMantras(getCustomMantras());
   }, []);
+
+  useEffect(() => {
+    setCustomTarget(selectedTarget.toString());
+  }, [selectedTarget]);
+
+  const parsedCustomTarget = Number(customTarget);
+  const isCustomTargetValid = !Number.isNaN(parsedCustomTarget) && parsedCustomTarget > 0;
+
+  const applyCustomTarget = () => {
+    if (isCustomTargetValid) {
+      onTargetSelect(parsedCustomTarget);
+    }
+  };
 
   const handleAddMantra = (newMantra: Omit<Mantra, "id">) => {
     const addedMantra = addCustomMantra(newMantra);
@@ -173,6 +187,36 @@ export default function ControlPanel({
                 {target}
               </button>
             ))}
+          </div>
+          <div className="mt-3 flex items-center gap-2 px-1">
+            <input
+              type="number"
+              min={1}
+              value={customTarget}
+              onChange={(e) => setCustomTarget(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applyCustomTarget();
+                }
+              }}
+              disabled={isLocked}
+              placeholder="Custom target"
+              className="flex-1 rounded-full border border-jaap-primary/20 bg-foreground/5 px-4 py-3 text-sm text-foreground outline-none transition focus:border-jaap-primary focus:ring-2 focus:ring-jaap-primary/15 disabled:opacity-50"
+            />
+            <button
+              type="button"
+              onClick={applyCustomTarget}
+              disabled={isLocked || !isCustomTargetValid}
+              className={cn(
+                "rounded-full px-4 py-3 text-sm font-bold uppercase tracking-widest transition-all",
+                isCustomTargetValid
+                  ? "bg-jaap-primary text-background hover:bg-jaap-primary/90"
+                  : "bg-foreground/10 text-foreground/40 cursor-not-allowed"
+              )}
+            >
+              Set
+            </button>
           </div>
         </div>
 
