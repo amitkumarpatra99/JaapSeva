@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -11,10 +11,6 @@ interface CounterProps {
 }
 
 export default function Counter({ count, target, onIncrement, isLocked }: CounterProps) {
-  // --- Logic State ---
-  const [isPressed, setIsPressed] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
   // --- Refs for Animation ---
   const buttonRef = useRef<HTMLButtonElement>(null);
   const rippleRef = useRef<HTMLDivElement>(null);
@@ -22,12 +18,14 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
 
 
   const handleIncrement = () => {
+    if (isLocked) return;
     onIncrement();
   };
 
   // --- GSAP Animations ---
   const { contextSafe } = useGSAP({ scope: containerRef });
 
+  // eslint-disable-next-line react-hooks/refs
   const animatePress = contextSafe(useCallback(() => {
     if (!buttonRef.current || !rippleRef.current) return;
     
@@ -45,6 +43,7 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
     });
   }, []));
 
+  // eslint-disable-next-line react-hooks/refs
   const animateRelease = contextSafe(useCallback(() => {
     if (!buttonRef.current || !rippleRef.current) return;
 
@@ -63,38 +62,14 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
   }, []));
 
   // --- Handlers ---
-  const startContinuousIncrement = () => {
-    setIsPressed(true);
+  const triggerIncrement = () => {
     handleIncrement();
-    animatePress(); // Trigger GSAP Press
-
-    intervalRef.current = setTimeout(() => {
-      intervalRef.current = setInterval(() => {
-        handleIncrement();
-      }, 120);
-    }, 400);
+    animatePress();
   };
 
-  const stopContinuousIncrement = () => {
-    setIsPressed(false);
-    animateRelease(); // Trigger GSAP Release
-
-    if (intervalRef.current) {
-      clearTimeout(intervalRef.current);
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
+  const releasePress = () => {
+    animateRelease();
   };
-
-  // Safe unmount handling
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearTimeout(intervalRef.current);
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, []);
 
   // --- Math ---
   const radius = 120; // Internal SVG radius (keeps stroke clean)
@@ -119,7 +94,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
         {/* 2. SVG Progress Ring (Absolute Full Fit) - The Mala */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-100">
           <svg className="w-full h-full max-w-[300px] max-h-[300px] overflow-visible" viewBox="0 0 300 300">
-            {/* ViewBox ensures internal 300x300 coord system matches expected path */}
             
             <defs>
               <radialGradient id="bead-highlight" cx="35%" cy="35%" r="65%">
@@ -188,10 +162,11 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
             "select-none cursor-pointer outline-none",
             "touch-none active:scale-95 transition-transform" // Native press fallback + GSAP
           )}
-          onPointerDown={startContinuousIncrement}
-          onPointerUp={stopContinuousIncrement}
-          onPointerLeave={stopContinuousIncrement}
-          onPointerCancel={stopContinuousIncrement}
+          onPointerDown={triggerIncrement}
+          onPointerUp={releasePress}
+          onPointerLeave={releasePress}
+          onPointerCancel={releasePress}
+          disabled={isLocked}
           aria-label="Increment Count"
           style={{ WebkitTapHighlightColor: "transparent" }}
         >
