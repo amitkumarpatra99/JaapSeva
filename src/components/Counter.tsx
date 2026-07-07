@@ -18,7 +18,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
 
 
   const handleIncrement = () => {
-    if (isLocked) return;
     onIncrement();
   };
 
@@ -166,7 +165,6 @@ export default function Counter({ count, target, onIncrement, isLocked }: Counte
           onPointerUp={releasePress}
           onPointerLeave={releasePress}
           onPointerCancel={releasePress}
-          disabled={isLocked}
           aria-label="Increment Count"
           style={{ WebkitTapHighlightColor: "transparent" }}
         >
